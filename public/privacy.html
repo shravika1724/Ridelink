@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy â€“ RideLink Vehicle Sharing & Rental System</title>
+  <meta name="description" content="Official Privacy Policy for RideLink. Learn how your personal data, identity documents, vehicle listings, and payment information are collected, used, and protected under Indian privacy laws.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6.5.1 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- App Stylesheets -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/legal.css">
+</head>
+<body>
+
+  <!-- =======================================================================
+       Header / Navigation Bar
+       ======================================================================= -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="/" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <span>Ride<span class="brand-highlight">Link</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/"><i class="fas fa-compass"></i> Explore Vehicles</a>
+        </li>
+        <li class="nav-item">
+          <a href="/terms.html"><i class="fas fa-file-contract"></i> Terms &amp; Conditions</a>
+        </li>
+        <li class="nav-item active">
+          <a href="/privacy.html"><i class="fas fa-user-shield"></i> Privacy Policy</a>
+        </li>
+      </ul>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <a href="/" class="btn btn-outline btn-sm">
+          <i class="fas fa-arrow-left"></i> Back to Vehicles
+        </a>
+        <button class="btn btn-primary btn-sm" onclick="window.print()" title="Print or Save PDF">
+          <i class="fas fa-print"></i> Print / PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =======================================================================
+       Main Privacy Policy Page
+       ======================================================================= -->
+  <main class="legal-page">
+    <div class="legal-container">
+
+      <!-- Hero Banner -->
+      <section class="legal-hero">
+        <div class="legal-hero-glow" style="background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, transparent 70%);"></div>
+        <div class="legal-hero-tag" style="color:var(--accent-emerald); border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.12);">
+          <i class="fas fa-lock"></i> Data Protection &amp; Confidentiality
+        </div>
+        <h1 class="legal-hero-title">RideLink Privacy Policy</h1>
+        <p class="legal-hero-subtitle">
+          Your privacy and data security are paramount at RideLink. This policy outlines how we collect, process, safeguard, and retain your personal data, identity documents, and payment details when using our mobility platform in India.
+        </p>
+
+        <!-- Metadata Chips -->
+        <div class="legal-meta-bar">
+          <div class="legal-meta-item">
+            <i class="fas fa-calendar-alt" style="color:var(--accent-emerald);"></i>
+            <span>Last Updated: <strong>October 29, 2026</strong></span>
+          </div>
+          <div class="legal-meta-item">
+            <i class="fas fa-shield-alt" style="color:var(--accent-cyan);"></i>
+            <span>Governing Framework: <strong>DPDP Act 2023 &amp; IT Act 2000</strong></span>
+          </div>
+          <div class="legal-meta-item">
+            <i class="fas fa-user-lock" style="color:var(--accent-purple);"></i>
+            <span>Identity Data: <strong>Masked Storage (Aadhaar &amp; DL)</strong></span>
+          </div>
+          <div class="legal-meta-item">
+            <i class="fas fa-credit-card" style="color:var(--accent-amber);"></i>
+            <span>Cardholder Data: <strong>PCI-DSS Compliant (Razorpay)</strong></span>
+          </div>
+        </div>
+
+        <!-- Quick Filter Input -->
+        <div class="legal-search-wrap">
+          <i class="fas fa-search legal-search-icon"></i>
+          <input type="text" id="privacy-quick-filter" class="legal-search-input" placeholder="Search privacy topics (e.g. Aadhaar, cookies, payments, deletion, sharing)..." onkeyup="filterPrivacySections(this.value)">
+        </div>
+      </section>
+
+      <!-- Mobile Scrollable Navigation Pills -->
+      <nav class="legal-mobile-pills" aria-label="Quick jump navigation">
+        <a href="#p-section-1" class="legal-pill active">1. Overview</a>
+        <a href="#p-section-2" class="legal-pill">2. Info We Collect</a>
+        <a href="#p-section-3" class="legal-pill">3. How We Use Data</a>
+        <a href="#p-section-4" class="legal-pill">4. Data Sharing</a>
+        <a href="#p-section-5" class="legal-pill">5. Security &amp; Masking</a>
+        <a href="#p-section-6" class="legal-pill">6. Data Retention</a>
+        <a href="#p-section-7" class="legal-pill">7. Your Rights</a>
+        <a href="#p-section-8" class="legal-pill">8. Cookies &amp; Storage</a>
+        <a href="#p-section-9" class="legal-pill">9. Minors' Privacy</a>
+        <a href="#p-section-10" class="legal-pill">10. Grievance Officer</a>
+      </nav>
+
+      <!-- Two-Column Layout -->
+      <div class="legal-layout">
+
+        <!-- Sticky Sidebar Navigation (Desktop) -->
+        <aside class="legal-sidebar" aria-label="Table of Contents">
+          <div class="legal-sidebar-title">
+            <span>Privacy Sections</span>
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <ul class="legal-nav-list" id="privacy-toc-list">
+            <li><a href="#p-section-1" class="legal-nav-link active"><span class="legal-nav-num">01</span> Introduction &amp; Scope</a></li>
+            <li><a href="#p-section-2" class="legal-nav-link"><span class="legal-nav-num">02</span> Information We Collect</a></li>
+            <li><a href="#p-section-3" class="legal-nav-link"><span class="legal-nav-num">03</span> How We Use Information</a></li>
+            <li><a href="#p-section-4" class="legal-nav-link"><span class="legal-nav-num">04</span> Third-Party Data Sharing</a></li>
+            <li><a href="#p-section-5" class="legal-nav-link"><span class="legal-nav-num">05</span> Data Security &amp; Masking</a></li>
+            <li><a href="#p-section-6" class="legal-nav-link"><span class="legal-nav-num">06</span> Data Retention &amp; Erasure</a></li>
+            <li><a href="#p-section-7" class="legal-nav-link"><span class="legal-nav-num">07</span> User Rights (DPDP Act)</a></li>
+            <li><a href="#p-section-8" class="legal-nav-link"><span class="legal-nav-num">08</span> Cookies &amp; Local Storage</a></li>
+            <li><a href="#p-section-9" class="legal-nav-link"><span class="legal-nav-num">09</span> Children's Privacy</a></li>
+            <li><a href="#p-section-10" class="legal-nav-link"><span class="legal-nav-num">10</span> Grievance Redressal</a></li>
+          </ul>
+
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+            <a href="/terms.html" class="btn btn-outline btn-block btn-sm" style="font-size: 0.8rem;">
+              <i class="fas fa-file-contract"></i> View Terms of Use
+            </a>
+          </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <article class="legal-content" id="privacy-content-stream">
+
+          <!-- SECTION 1 -->
+          <section id="p-section-1" class="legal-card" data-title="Introduction & Scope">
+            <div class="legal-card-header">
+              <div class="legal-card-icon emerald">
+                <i class="fas fa-user-shield"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 01</span>
+                <h2 class="legal-card-title">Introduction, Scope &amp; Legal Framework</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              <strong>RideLink Mobility Technologies</strong> (â€œRideLinkâ€ , â€œweâ€ , â€œusâ€ , or â€œourâ€ ) provides a peer-to-peer digital vehicle rental and sharing platform. We respect the privacy of our website visitors, registered renters, vehicle owners (hosts), and partners.
+            </p>
+            <p class="legal-text">
+              This Privacy Policy explains how we collect, store, process, transfer, and protect your Personal Data and Sensitive Personal Data or Information (SPDI) in compliance with:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span>The <strong>Digital Personal Data Protection Act, 2023 (DPDP Act)</strong></span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span>Section 43A of the <strong>Information Technology Act, 2000</strong></span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span>The <strong>Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011</strong></span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 2 -->
+          <section id="p-section-2" class="legal-card" data-title="Information We Collect">
+            <div class="legal-card-header">
+              <div class="legal-card-icon">
+                <i class="fas fa-database"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 02</span>
+                <h2 class="legal-card-title">Categories of Information We Collect</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              We collect information that you directly provide when registering an account, submitting KYC documents, listing a vehicle, booking a rental, or communicating through the platform:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-user legal-list-bullet"></i>
+                <span><strong>Account &amp; Contact Details:</strong> Full legal name, verified email address, mobile phone number, account password (stored exclusively as salted one-way bcrypt cryptographic hashes), and avatar/profile picture.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-id-card legal-list-bullet"></i>
+                <span><strong>Government KYC &amp; Verification Documents:</strong> Driving License number (masked to display only prefix and last 4 digits in database records), Driving License document copy/PDF, Aadhaar number (masked in full compliance with UIDAI circulars e.g. <code>XXXX-XXXX-1234</code>), and Aadhaar document copy for identity verification.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-car legal-list-bullet"></i>
+                <span><strong>Host Vehicle Information:</strong> Registration number (RC), vehicle make, model, manufacturing year, seating capacity, fuel type, transmission, vehicle photos, city location, and pickup address.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-university legal-list-bullet"></i>
+                <span><strong>Host Banking &amp; Payout Data:</strong> Account holder name, masked bank account number, IFSC code, bank branch name, and Virtual Payment Address (UPI ID) for crediting rental earnings.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-receipt legal-list-bullet"></i>
+                <span><strong>Transactional &amp; Booking Data:</strong> Rental start and end dates, pickup/return locations, trip fare breakdown, damage protection fees, 18% GST (CGST/SGST) records, Razorpay payment reference IDs, UPI transaction IDs, and tax invoice numbers. <em>(Note: We never collect or store full credit/debit card numbers or CVV codes; all payment entry is handled securely by Razorpay's PCI-DSS Level 1 gateway).</em></span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-comments legal-list-bullet"></i>
+                <span><strong>Trip Messaging &amp; Reviews:</strong> Communications exchanged via the in-app trip messaging system between Renter and Host, trip ratings, and public vehicle reviews.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 3 -->
+          <section id="p-section-3" class="legal-card" data-title="How We Use Information">
+            <div class="legal-card-header">
+              <div class="legal-card-icon purple">
+                <i class="fas fa-tasks"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 03</span>
+                <h2 class="legal-card-title">Purposes for Which We Process Your Data</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              We process your personal information strictly for legitimate, contractual, and statutory purposes:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-check legal-list-bullet"></i>
+                <span><strong>Trip Facilitation:</strong> Processing bookings, verifying vehicle availability, coordinating pickup and return schedules, and enabling communication between Host and Renter.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check legal-list-bullet"></i>
+                <span><strong>Identity &amp; License Authentication:</strong> Verifying driving eligibility with MoRTH / DigiLocker sandbox APIs to ensure that only legally licensed drivers take custody of motor vehicles under the Motor Vehicles Act, 1988.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check legal-list-bullet"></i>
+                <span><strong>Payment Processing &amp; Invoicing:</strong> Authorizing rental payments, issuing GST tax invoices, holding refundable security deposits, and remitting payouts to vehicle hosts.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check legal-list-bullet"></i>
+                <span><strong>Safety &amp; Fraud Prevention:</strong> Preventing identity theft, combating unauthorized vehicle listings, investigating accident claims, and managing damage reports.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check legal-list-bullet"></i>
+                <span><strong>Statutory Compliance:</strong> Complying with tax audit regulations under the Goods and Services Tax (GST) laws and lawful requests from Indian police or judicial authorities.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 4 -->
+          <section id="p-section-4" class="legal-card" data-title="Third-Party Data Sharing">
+            <div class="legal-card-header">
+              <div class="legal-card-icon amber">
+                <i class="fas fa-share-alt"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 04</span>
+                <h2 class="legal-card-title">How and When We Share Your Information</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              RideLink <strong>NEVER</strong> sells, rents, or monetizes your personal data to third-party marketing companies or data brokers. Data is shared exclusively under the following strict conditions:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-arrows-alt-h legal-list-bullet"></i>
+                <span><strong>Between Host and Renter:</strong> When a reservation is confirmed, we share the necessary contact details (first name, phone number, pickup address, and vehicle registration number) between the matched Host and Renter strictly to facilitate key handover and vehicle return.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-credit-card legal-list-bullet"></i>
+                <span><strong>Payment Gateway Partners:</strong> Transaction values and billing identifiers are shared with our authorized payment processor (Razorpay Software Private Limited) to execute encrypted payment authorization and refunds.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-gavel legal-list-bullet"></i>
+                <span><strong>Law Enforcement &amp; Legal Compliance:</strong> We may disclose user details when mandated by a formal written notice, court warrant, or statutory order under Section 91 of the Code of Criminal Procedure, 1973 / Section 94 of the Bharatiya Nagarik Suraksha Sanhita, 2023.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 5 -->
+          <section id="p-section-5" class="legal-card" data-title="Security & Masking">
+            <div class="legal-card-header">
+              <div class="legal-card-icon emerald">
+                <i class="fas fa-lock"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 05</span>
+                <h2 class="legal-card-title">Data Security, Encryption &amp; Masking Procedures</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              We employ comprehensive technical and organizational security measures to protect your data from loss, unauthorized access, alteration, or disclosure:
+            </p>
+            <div class="legal-callout emerald">
+              <div class="legal-callout-header"><i class="fas fa-shield-alt"></i> Bank-Grade Protection Architecture</div>
+              <ul style="margin-left:1.25rem; margin-top:0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
+                <li><strong>Encryption in Transit:</strong> All web traffic is encrypted using Transport Layer Security (TLS 1.3 / HTTPS) with 256-bit certificates.</li>
+                <li><strong>Password Security:</strong> Passwords are never stored in plaintext; they are irreversibly hashed using salted bcrypt (cost factor 10).</li>
+                <li><strong>Masked Government IDs:</strong> Aadhaar and Driving License numbers are masked prior to database persistence (e.g. <code>XXXX-XXXX-7842</code> and <code>DL-04-2019-XXXX-4819</code>), preventing exposure even during administrative reviews.</li>
+                <li><strong>Role-Based Access Control (RBAC):</strong> Backend database access is strictly partitioned according to verified user roles (Customer, Owner, Administrator).</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- SECTION 6 -->
+          <section id="p-section-6" class="legal-card" data-title="Data Retention & Erasure">
+            <div class="legal-card-header">
+              <div class="legal-card-icon">
+                <i class="fas fa-history"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 06</span>
+                <h2 class="legal-card-title">Data Retention Periods &amp; Account Deletion</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              We retain personal data only for as long as necessary to fulfill the purposes for which it was gathered, or to comply with statutory accounting and tax retention periods under Indian law:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-clock legal-list-bullet"></i>
+                <span><strong>Active Accounts:</strong> Profile data, vehicle listings, and active booking records are retained for the active duration of your account.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-file-invoice legal-list-bullet"></i>
+                <span><strong>Statutory Tax Records:</strong> Invoices, transaction codes, and GST breakdown records must be preserved for at least <strong>8 years</strong> pursuant to Section 36 of the Central Goods and Services Tax (CGST) Act, 2017.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-trash-alt legal-list-bullet"></i>
+                <span><strong>Account Deletion:</strong> You may request account deletion at any time by contacting support. Upon receipt, your personal profile and uploaded KYC documents will be purged, subject to statutory retention of past financial transaction logs.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 7 -->
+          <section id="p-section-7" class="legal-card" data-title="User Rights (DPDP Act)">
+            <div class="legal-card-header">
+              <div class="legal-card-icon purple">
+                <i class="fas fa-user-check"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 07</span>
+                <h2 class="legal-card-title">Your Rights under the DPDP Act, 2023</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              As a Data Principal under the Digital Personal Data Protection Act, 2023, you are entitled to the following rights:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-eye legal-list-bullet"></i>
+                <span><strong>Right to Access:</strong> You can view your stored profile details, active bookings, transactions, and vehicle listings directly via your user dashboard.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-edit legal-list-bullet"></i>
+                <span><strong>Right to Correction &amp; Updation:</strong> You may correct inaccurate or incomplete profile data, vehicle descriptions, or bank account details at any time.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-user-minus legal-list-bullet"></i>
+                <span><strong>Right to Erasure:</strong> You may request deletion of personal information where processing is no longer necessary for contractual or statutory compliance.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-comment-dots legal-list-bullet"></i>
+                <span><strong>Right of Grievance Redressal:</strong> You have the right to readily accessible grievance redressal mechanisms regarding personal data processing.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 8 -->
+          <section id="p-section-8" class="legal-card" data-title="Cookies & Local Storage">
+            <div class="legal-card-header">
+              <div class="legal-card-icon amber">
+                <i class="fas fa-cookie-bite"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 08</span>
+                <h2 class="legal-card-title">Cookies, Web Tokens &amp; Local Storage</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              RideLink utilizes standard browser storage technologies to deliver a fast, responsive, and secure experience:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-key legal-list-bullet"></i>
+                <span><strong>Authentication Tokens:</strong> We store a JSON Web Token (<code>ridelink_token</code>) in your browser's local storage to maintain your logged-in session securely across page visits.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-sliders-h legal-list-bullet"></i>
+                <span><strong>Preferences:</strong> Basic display preferences and cached profile data (<code>ridelink_user</code>) are stored locally to prevent repeated network queries.</span>
+              </li>
+            </ul>
+            <p class="legal-text">
+              You can clear browser local storage or disable cookies at any time in your browser settings; however, doing so will log you out of your account session.
+            </p>
+          </section>
+
+          <!-- SECTION 9 -->
+          <section id="p-section-9" class="legal-card" data-title="Children's Privacy">
+            <div class="legal-card-header">
+              <div class="legal-card-icon rose">
+                <i class="fas fa-child"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 09</span>
+                <h2 class="legal-card-title">Children's Privacy &amp; Age Restrictions</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              RideLink provides motor vehicle rental services that require a valid government driving license and legal contractual capacity. Consequently, our Platform is strictly restricted to individuals aged 18 and older. We do not knowingly collect, request, or maintain personal data from minors. If we discover that a minor under 18 has submitted personal data, we will immediately delete the account and purge associated data.
+            </p>
+          </section>
+
+          <!-- SECTION 10 -->
+          <section id="p-section-10" class="legal-card" data-title="Grievance Redressal">
+            <div class="legal-card-header">
+              <div class="legal-card-icon emerald">
+                <i class="fas fa-balance-scale"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 10</span>
+                <h2 class="legal-card-title">Grievance Redressal Officer &amp; Contact Details</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              If you have any questions, concerns, or complaints regarding the processing of your personal data under this Privacy Policy or the DPDP Act 2023, please contact our designated Grievance Officer:
+            </p>
+            <div class="legal-callout emerald">
+              <div class="legal-callout-header"><i class="fas fa-user-shield"></i> Data Protection &amp; Grievance Officer</div>
+              <p style="margin-top:0.4rem;"><strong>Name:</strong> [DECISION REQUIRED: e.g. Aniket Verma, Grievance Officer]</p>
+              <p><strong>Designation:</strong> Data Protection Officer, RideLink Mobility Technologies</p>
+              <p><strong>Official Privacy Email:</strong> <a href="mailto:privacy@ridelink.in" style="color:var(--accent-cyan);">[DECISION REQUIRED: e.g. privacy@ridelink.in / support@ridelink.com]</a></p>
+              <p><strong>Corporate Postal Address:</strong> [DECISION REQUIRED: e.g. RideLink Mobility Technologies Pvt. Ltd., #412 Indiranagar 100ft Road, Bangalore, Karnataka - 560038, India]</p>
+            </div>
+            <p class="legal-text" style="font-size:0.85rem; color:var(--text-dim); margin-top:1rem;">
+              We commit to acknowledging all data privacy grievances within 24 hours and addressing them promptly in compliance with statutory deadlines.
+            </p>
+          </section>
+
+        </article>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Floating Back to Top Button -->
+  <button id="privacy-back-top" class="legal-back-top" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- =======================================================================
+       Website Footer
+       ======================================================================= -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+            <span>Ride<span class="brand-highlight">Link</span></span>
+          </div>
+          <p class="footer-desc">
+            Indiaâ€™s premier peer-to-peer vehicle sharing and mobility ecosystem. Rent verified cars, SUVs, bikes, and EVs across major Indian metropolitan areas with transparent GST pricing, instant sandbox verification, and comprehensive damage protection.
+          </p>
+          <div class="footer-badges">
+            <span class="footer-trust-chip"><i class="fas fa-shield-alt"></i> 256-Bit SSL Encrypted</span>
+            <span class="footer-trust-chip"><i class="fas fa-check-circle"></i> MoRTH DL Verified</span>
+            <span class="footer-trust-chip"><i class="fas fa-percent"></i> 18% GST Compliant</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Explore Mobility</h4>
+          <ul class="footer-links">
+            <li><a href="/#view-marketplace" class="footer-link"><i class="fas fa-car"></i> Cars &amp; SUVs</a></li>
+            <li><a href="/#view-marketplace" class="footer-link"><i class="fas fa-charging-station"></i> Electric Vehicles</a></li>
+            <li><a href="/#view-marketplace" class="footer-link"><i class="fas fa-motorcycle"></i> Two-Wheelers</a></li>
+            <li><a href="/#view-marketplace" class="footer-link"><i class="fas fa-crown"></i> Luxury Fleet</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Host Community</h4>
+          <ul class="footer-links">
+            <li><a href="/" class="footer-link"><i class="fas fa-plus-circle"></i> List Your Vehicle</a></li>
+            <li><a href="/terms.html#section-4" class="footer-link"><i class="fas fa-car-side"></i> Host Guidelines</a></li>
+            <li><a href="/terms.html#section-11" class="footer-link"><i class="fas fa-shield-alt"></i> Protection &amp; Shield</a></li>
+            <li><a href="/terms.html#section-7" class="footer-link"><i class="fas fa-calculator"></i> Earnings &amp; Payouts</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Legal &amp; Trust</h4>
+          <ul class="footer-links">
+            <li><a href="/terms.html" class="footer-link"><i class="fas fa-file-contract"></i> Terms and Conditions</a></li>
+            <li><a href="/privacy.html" class="footer-link" style="color:var(--accent-cyan);font-weight:600;"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            <li><a href="/terms.html#section-8" class="footer-link"><i class="fas fa-undo"></i> Cancellation &amp; Refund Policy</a></li>
+            <li><a href="/privacy.html#p-section-10" class="footer-link"><i class="fas fa-envelope"></i> Grievance Officer</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 RideLink Mobility Technologies Pvt. Ltd. All rights reserved. Operating in compliance with the Digital Personal Data Protection Act 2023 and Information Technology Act 2000.</p>
+        <div class="footer-legal-links">
+          <a href="/terms.html">Terms &amp; Conditions</a>
+          <a href="/privacy.html">Privacy Policy</a>
+          <a href="/terms.html#section-8">Refund Rules</a>
+          <a href="/privacy.html#p-section-10">Data Officer</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script for Table of Contents spy, search filter & back-to-top -->
+  <script>
+    function filterPrivacySections(query) {
+      const q = (query || '').toLowerCase().trim();
+      const sections = document.querySelectorAll('.legal-card');
+      sections.forEach(sec => {
+        const text = sec.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          sec.style.display = 'block';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.pageYOffset;
+      const backTop = document.getElementById('privacy-back-top');
+      if (backTop) {
+        if (scrollY > 400) backTop.classList.add('show');
+        else backTop.classList.remove('show');
+      }
+
+      const sections = document.querySelectorAll('.legal-card');
+      let currentSectionId = '';
+      sections.forEach(sec => {
+        const sectionTop = sec.offsetTop - 120;
+        const sectionHeight = sec.offsetHeight;
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          currentSectionId = sec.getAttribute('id');
+        }
+      });
+
+      if (currentSectionId) {
+        document.querySelectorAll('.legal-nav-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${currentSectionId}`) {
+            link.classList.add('active');
+          }
+        });
+        document.querySelectorAll('.legal-pill').forEach(pill => {
+          pill.classList.remove('active');
+          if (pill.getAttribute('href') === `#${currentSectionId}`) {
+            pill.classList.add('active');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

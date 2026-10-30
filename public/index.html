@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RideLink â€“ Vehicle Sharing & Peer-to-Peer Rental System</title>
+  <meta name="description"
+    content="Rent out partially used vehicles or book cars, SUVs, bikes, and EVs across India. Instant verification, transparent GST pricing, and secure UPI sandbox payment.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome 6.5.1 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- App Stylesheets -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/marketplace.css">
+  <link rel="stylesheet" href="/css/modal.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+
+  <!-- =======================================================================
+       Header / Navigation Bar
+       ======================================================================= -->
+  <header class="header">
+    <div class="nav-container">
+      <div class="brand-logo" onclick="navigateTo('marketplace')">
+        <div class="brand-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <span>Ride<span class="brand-highlight">Link</span></span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item active" data-view="marketplace">
+          <i class="fas fa-compass"></i> Explore Vehicles
+        </li>
+        <li class="nav-item" id="nav-dynamic-dash" data-view="customer-dash" style="display: none;">
+          <i class="fas fa-ticket-alt"></i> My Trips
+        </li>
+      </ul>
+
+      <!-- Demo Persona Switcher Bar (Quick Testing) -->
+      <div class="demo-bar-desktop"
+        style="display: flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.04); padding: 0.25rem 0.5rem; border-radius: var(--radius-full); border: 1px solid var(--border-subtle);"
+        title="Switch user role in 1-click">
+        <span
+          style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; padding: 0 0.35rem;">Demo:</span>
+        <button class="btn btn-ghost btn-sm" onclick="doDemoLogin('customer')"
+          style="padding: 0.25rem 0.55rem; font-size: 0.75rem;">
+          <i class="fas fa-user" style="color: var(--accent-cyan);"></i> Customer
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="doDemoLogin('owner')"
+          style="padding: 0.25rem 0.55rem; font-size: 0.75rem;">
+          <i class="fas fa-car" style="color: var(--accent-emerald);"></i> Owner
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="doDemoLogin('admin')"
+          style="padding: 0.25rem 0.55rem; font-size: 0.75rem;">
+          <i class="fas fa-shield-alt" style="color: var(--accent-purple);"></i> Admin
+        </button>
+      </div>
+
+      <!-- Auth Actions (Top-Right Sign In / User Status) -->
+      <div class="nav-actions">
+        <!-- Guest View: Prominent Sign In and Register Buttons -->
+        <div id="nav-auth-guest" style="display: flex; align-items: center; gap: 0.6rem;">
+          <button class="btn btn-primary" onclick="AuthUI ? AuthUI.openLogin() : openModal('modal-auth')"
+            style="font-weight: 700; padding: 0.48rem 1.15rem; font-size: 0.88rem; box-shadow: 0 0 15px rgba(6,182,212,0.35);">
+            <i class="fas fa-sign-in-alt"></i> Sign In
+          </button>
+          <button class="btn btn-outline" onclick="AuthUI ? AuthUI.openRegister() : openModal('modal-auth')"
+            style="font-weight: 600; padding: 0.48rem 0.95rem; font-size: 0.88rem;">
+            <i class="fas fa-user-plus"></i> Register
+          </button>
+        </div>
+
+        <!-- Authenticated User View: Profile info + Switch/Sign Out -->
+        <div id="nav-auth-user" style="display: none; align-items: center; gap: 0.75rem;">
+          <div class="nav-profile"
+            onclick="const u = api.getUser(); if (u) navigateTo(u.role === 'owner' ? 'owner-dash' : (u.role === 'admin' ? 'admin-dash' : 'customer-dash'));"
+            title="Click to view your Dashboard & Profile">
+            <img src="" id="nav-user-avatar" class="nav-avatar" alt="User">
+            <div class="nav-user-info">
+              <span class="nav-user-name" id="nav-user-name">User</span>
+              <span class="nav-user-role" id="nav-user-role">Customer</span>
+            </div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="openModal('modal-auth')"
+            title="Sign in with another account or use Google" style="font-size: 0.78rem; padding: 0.35rem 0.65rem;">
+            <i class="fas fa-user-circle"></i> Switch Account
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="handleLogout()" title="Sign Out"
+            style="color: var(--accent-rose); font-size: 0.8rem; padding: 0.35rem 0.65rem;">
+            <i class="fas fa-sign-out-alt"></i> Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =======================================================================
+       VIEW 1: EXPLORE / MARKETPLACE
+       ======================================================================= -->
+  <main id="view-marketplace" class="app-view active-view">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-overlay-glow"></div>
+      <div class="hero-content">
+        <div class="hero-tag">
+          <i class="fas fa-shield-alt"></i> Peer-to-Peer Vehicle Sharing
+        </div>
+        <h1 class="hero-title">
+          Drive What Moves You.<br>
+          <span class="glow-text">Rent Local. Earn Effortlessly.</span>
+        </h1>
+        <p class="hero-desc">
+          Rent pristine cars, SUVs, EVs, and adventure bikes directly from verified local owners. Transparent GST
+          breakdown, verified digital KYC, and instant sandbox UPI checkout.
+        </p>
+
+        <!-- Search & Filter Widget -->
+        <div class="search-bar-widget">
+          <div class="search-field">
+            <i class="fas fa-map-marker-alt"></i>
+            <div class="search-field-inner">
+              <label for="hero-city-select">Pickup City</label>
+              <select id="hero-city-select">
+                <option value="all">All Cities (India)</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi NCR">Delhi NCR</option>
+                <option value="Goa">Goa</option>
+                <option value="Hyderabad">Hyderabad</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="search-field">
+            <i class="fas fa-calendar-alt"></i>
+            <div class="search-field-inner">
+              <label for="hero-trip-dates">Rental Duration</label>
+              <input type="text" id="hero-trip-dates" value="Flexible (Daily / Hourly)" readonly>
+            </div>
+          </div>
+
+          <div class="search-field">
+            <i class="fas fa-search"></i>
+            <div class="search-field-inner">
+              <label for="hero-query-input">Keyword / Model</label>
+              <input type="text" id="hero-query-input" placeholder="e.g. EV, Thar, Harley...">
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-search" id="btn-hero-search">
+            <i class="fas fa-search"></i> Find Vehicles
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Chips Strip -->
+    <nav class="category-bar" aria-label="Vehicle categories">
+      <button class="cat-chip active" data-category="all">
+        <i class="fas fa-border-all"></i> All Fleet
+      </button>
+      <button class="cat-chip" data-category="Electric">
+        <i class="fas fa-bolt" style="color: var(--accent-cyan);"></i> Electric EVs
+      </button>
+      <button class="cat-chip" data-category="SUV">
+        <i class="fas fa-truck-monster" style="color: var(--accent-emerald);"></i> 4x4 & SUVs
+      </button>
+      <button class="cat-chip" data-category="Luxury">
+        <i class="fas fa-crown" style="color: var(--accent-amber);"></i> Luxury Sedans
+      </button>
+      <button class="cat-chip" data-category="Bike">
+        <i class="fas fa-motorcycle" style="color: var(--accent-rose);"></i> Sport & Cruiser Bikes
+      </button>
+      <button class="cat-chip" data-category="Hatchback">
+        <i class="fas fa-car" style="color: var(--accent-purple);"></i> City Hatchbacks
+      </button>
+    </nav>
+
+    <!-- Main Marketplace Content: Filter Sidebar + Vehicles Grid -->
+    <div class="marketplace-container" id="marketplace-results">
+      <!-- Filter Sidebar -->
+      <aside class="filter-card">
+        <div class="filter-header">
+          <div class="filter-title">
+            <i class="fas fa-sliders-h" style="color: var(--accent-cyan);"></i>
+            <span>Filters</span>
+          </div>
+          <button class="filter-reset" id="btn-reset-filters">Reset All</button>
+        </div>
+
+        <!-- Price Range Slider -->
+        <div class="filter-section">
+          <div class="filter-heading">Max Price (per day)</div>
+          <div class="price-slider-wrap">
+            <input type="range" class="price-slider" id="filter-price-slider" min="500" max="15000" step="250"
+              value="15000">
+            <div class="price-values">
+              <span>â‚¹500</span>
+              <span class="highlight" id="filter-price-max-label">â‚¹15,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transmission -->
+        <div class="filter-section">
+          <div class="filter-heading">Transmission</div>
+          <div class="filter-options">
+            <label class="filter-label">
+              <input type="radio" name="filter-transmission" value="all" checked> All Transmissions
+            </label>
+            <label class="filter-label">
+              <input type="radio" name="filter-transmission" value="Automatic"> Automatic
+            </label>
+            <label class="filter-label">
+              <input type="radio" name="filter-transmission" value="Manual"> Manual
+            </label>
+          </div>
+        </div>
+
+        <!-- Fuel Type -->
+        <div class="filter-section">
+          <div class="filter-heading">Fuel / Propulsion</div>
+          <div class="filter-options">
+            <label class="filter-label">
+              <input type="radio" name="filter-fuel" value="all" checked> Any Fuel
+            </label>
+            <label class="filter-label">
+              <input type="radio" name="filter-fuel" value="Electric"> Electric (Clean EV)
+            </label>
+            <label class="filter-label">
+              <input type="radio" name="filter-fuel" value="Petrol"> Petrol
+            </label>
+            <label class="filter-label">
+              <input type="radio" name="filter-fuel" value="Diesel"> Diesel Turbo
+            </label>
+          </div>
+        </div>
+
+        <!-- Host Trust Callout -->
+        <div
+          style="background: rgba(6, 182, 212, 0.07); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: var(--radius-md); padding: 1rem; margin-top: 1.5rem;">
+          <div
+            style="display: flex; align-items: center; gap: 0.5rem; color: var(--accent-cyan); font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem;">
+            <i class="fas fa-shield-check"></i> RideLink Shield
+          </div>
+          <p style="font-size: 0.775rem; color: var(--text-muted); line-height: 1.4;">
+            Every ride includes 24/7 Roadside Assistance, sanitized delivery, and â‚¹299 damage protection waiver.
+          </p>
+        </div>
+      </aside>
+
+      <!-- Results Grid -->
+      <section>
+        <div class="market-header">
+          <div class="market-results-count">
+            Showing <strong id="market-results-count-num">6</strong> verified vehicles available for rent
+          </div>
+          <div class="sort-select-wrap">
+            <label for="market-sort-select">Sort by:</label>
+            <select id="market-sort-select" class="sort-select">
+              <option value="newest">Featured / Recommended</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+              <option value="rating">Top Customer Rated</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Grid Container -->
+        <div class="vehicles-grid" id="vehicles-grid-container">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- =======================================================================
+       VIEW 2: CUSTOMER DASHBOARD
+       ======================================================================= -->
+  <main id="view-customer-dash" class="app-view">
+    <div class="dashboard-wrapper">
+      <!-- Header -->
+      <div class="dash-header">
+        <div class="dash-user-meta">
+          <img src="" id="cust-profile-avatar" class="dash-avatar-lg" alt="Avatar">
+          <div class="dash-title-wrap">
+            <h1>
+              <span id="cust-profile-name">Rahul Sharma</span>
+              <span id="cust-kyc-badge" class="badge badge-verified">VERIFIED</span>
+            </h1>
+            <div class="dash-subtitle">
+              <span id="cust-profile-email">rahul@customer.com</span> â€¢ <span id="cust-profile-phone">+91 98765
+                43210</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-header-actions">
+          <button class="btn btn-outline btn-sm" onclick="openModal('modal-kyc-verify')">
+            <i class="fas fa-id-card"></i> Manage KYC ID
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="navigateTo('marketplace')">
+            <i class="fas fa-search"></i> Book Another Ride
+          </button>
+        </div>
+      </div>
+
+      <!-- KYC Privacy Notice Banner -->
+      <div class="kyc-banner" id="cust-kyc-action-banner" style="display: none;">
+        <div class="kyc-banner-text">
+          <div class="kyc-banner-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 1rem; margin-bottom: 0.2rem;">Complete Digital Identity Verification</h4>
+            <p style="font-size: 0.825rem; color: var(--text-muted);">
+              Submit your Driving Licence and Aadhaar to unlock instant booking without security deposit hold.
+            </p>
+          </div>
+        </div>
+        <button class="btn btn-emerald btn-sm" onclick="openModal('modal-kyc-verify')">
+          <i class="fas fa-check-shield"></i> Verify Now
+        </button>
+      </div>
+
+      <!-- Identity Privacy Card -->
+      <div
+        style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+        <div>
+          <span
+            style="font-size: 0.725rem; text-transform: uppercase; color: var(--text-dim); font-weight: 700;">Driving
+            Licence (Masked)</span>
+          <div style="font-family: monospace; font-size: 1rem; color: var(--accent-cyan); font-weight: 700;"
+            id="cust-masked-dl">DL-04-XXXX-4819</div>
+        </div>
+        <div>
+          <span
+            style="font-size: 0.725rem; text-transform: uppercase; color: var(--text-dim); font-weight: 700;">Aadhaar
+            Number (DPDP Masked)</span>
+          <div style="font-family: monospace; font-size: 1rem; color: var(--accent-emerald); font-weight: 700;"
+            id="cust-masked-aadhaar">XXXX-XXXX-7842</div>
+        </div>
+        <div>
+          <span
+            style="font-size: 0.725rem; text-transform: uppercase; color: var(--text-dim); font-weight: 700;">Privacy
+            Protection</span>
+          <div style="font-size: 0.85rem; color: var(--text-muted);"><i class="fas fa-lock"
+              style="color: var(--accent-emerald);"></i> Protected under Indian DPDP Act</div>
+        </div>
+      </div>
+
+      <!-- My Trips Section -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h2 style="font-family: var(--font-heading); font-size: 1.35rem;">My Rental Trips & Bookings</h2>
+      </div>
+
+      <!-- Bookings Tabs -->
+      <div class="dash-tabs">
+        <button class="dash-tab-btn cust-tab-btn active" data-tab="all">
+          <i class="fas fa-list"></i> All Trips
+        </button>
+        <button class="dash-tab-btn cust-tab-btn" data-tab="confirmed">
+          <i class="fas fa-calendar-check"></i> Confirmed
+        </button>
+        <button class="dash-tab-btn cust-tab-btn" data-tab="active">
+          <i class="fas fa-road"></i> In Progress
+        </button>
+        <button class="dash-tab-btn cust-tab-btn" data-tab="completed">
+          <i class="fas fa-flag-checkered"></i> Completed
+        </button>
+        <button class="dash-tab-btn cust-tab-btn" data-tab="cancelled">
+          <i class="fas fa-ban"></i> Cancelled
+        </button>
+      </div>
+
+      <!-- Bookings List Container -->
+      <div id="cust-bookings-list">
+        <!-- Populated via customer-dash.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- =======================================================================
+       VIEW 3: VEHICLE OWNER DASHBOARD
+       ======================================================================= -->
+  <main id="view-owner-dash" class="app-view">
+    <div class="dashboard-wrapper">
+      <div class="dash-header">
+        <div class="dash-user-meta">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80"
+            class="dash-avatar-lg" alt="Host Avatar">
+          <div class="dash-title-wrap">
+            <h1>
+              <span>Host Partner Portal</span>
+              <span class="badge badge-verified"><i class="fas fa-star"></i> Superhost</span>
+            </h1>
+            <div class="dash-subtitle">Manage your shared vehicles, bookings, and automated bank payouts</div>
+          </div>
+        </div>
+
+        <div class="dash-header-actions">
+          <button class="btn btn-emerald btn-sm" onclick="openModal('modal-add-vehicle')">
+            <i class="fas fa-plus-circle"></i> List a New Vehicle
+          </button>
+        </div>
+      </div>
+
+      <!-- Earnings KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card emerald">
+          <div class="kpi-icon-glow"><i class="fas fa-wallet"></i></div>
+          <div class="kpi-label">Net Host Payout</div>
+          <div class="kpi-value" id="owner-kpi-net-earnings">â‚¹0</div>
+          <div class="kpi-subtext" id="owner-kpi-gross-earnings">Gross â‚¹0 (10% platform fee)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-glow"><i class="fas fa-car-side"></i></div>
+          <div class="kpi-label">Listed Vehicles</div>
+          <div class="kpi-value" id="owner-kpi-total-fleet">0</div>
+          <div class="kpi-subtext" id="owner-kpi-available-fleet">0 active available</div>
+        </div>
+
+        <div class="kpi-card purple">
+          <div class="kpi-icon-glow"><i class="fas fa-calendar-alt"></i></div>
+          <div class="kpi-label">Total Bookings</div>
+          <div class="kpi-value" id="owner-kpi-total-trips">0</div>
+          <div class="kpi-subtext">Trips booked by customers</div>
+        </div>
+
+        <div class="kpi-card amber">
+          <div class="kpi-icon-glow"><i class="fas fa-star"></i></div>
+          <div class="kpi-label">Host Rating</div>
+          <div class="kpi-value" id="owner-kpi-rating">4.9 â˜…</div>
+          <div class="kpi-subtext">Based on customer reviews</div>
+        </div>
+      </div>
+
+      <!-- Host Monthly Earnings Performance Chart -->
+      <div
+        style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+          <div>
+            <h3
+              style="font-family: var(--font-heading); font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-chart-bar" style="color: var(--accent-emerald);"></i> Monthly Revenue Performance
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-dim);">Net host earnings growth over the last 6 months (+32%
+              MoM)</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.75rem;">
+            <span style="display: flex; align-items: center; gap: 0.35rem;"><span
+                style="width: 10px; height: 10px; background: var(--accent-emerald); border-radius: 2px;"></span> Net
+              Disbursed</span>
+          </div>
+        </div>
+        <div id="owner-earnings-chart-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Owner Navigation Tabs -->
+      <div class="dash-tabs">
+        <button class="dash-tab-btn owner-tab-btn active" data-pane="pane-owner-fleet">
+          <i class="fas fa-car"></i> My Listed Fleet
+        </button>
+        <button class="dash-tab-btn owner-tab-btn" data-pane="pane-owner-requests">
+          <i class="fas fa-inbox"></i> Booking Requests & Trips
+        </button>
+        <button class="dash-tab-btn owner-tab-btn" data-pane="pane-owner-payouts">
+          <i class="fas fa-university"></i> Bank & UPI Payouts
+        </button>
+        <button class="dash-tab-btn owner-tab-btn" data-pane="pane-owner-profile">
+          <i class="fas fa-user-edit"></i> My Profile
+        </button>
+      </div>
+
+      <!-- Pane 1: Fleet Management -->
+      <div id="pane-owner-fleet" class="owner-tab-pane active">
+        <div class="fleet-grid" id="owner-vehicles-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Pane 2: Booking Requests Table -->
+      <div id="pane-owner-requests" class="owner-tab-pane" style="display: none;">
+        <div class="data-table-card">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Booking ID</th>
+                  <th>Vehicle</th>
+                  <th>Customer</th>
+                  <th>Rental Schedule</th>
+                  <th>Earnings</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="owner-bookings-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pane 3: Bank & UPI Settings -->
+      <div id="pane-owner-payouts" class="owner-tab-pane" style="display: none;">
+        <div
+          style="max-width: 650px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.75rem;">
+          <h3
+            style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-lock" style="color: var(--accent-emerald);"></i> Bank & UPI Payout Settings
+          </h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+            Rental earnings are directly disbursed to this verified bank account or UPI VPA upon trip completion.
+            Account numbers are encrypted and masked to ensure financial security.
+          </p>
+
+          <form id="form-bank-details">
+            <div class="form-group">
+              <label class="form-label" for="bank-holder-input">Beneficiary Account Holder Name</label>
+              <input type="text" id="bank-holder-input" class="form-control" required placeholder="e.g. Priya Patel">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="bank-acc-input">Bank Account Number (Encrypted & Masked)</label>
+              <input type="text" id="bank-acc-input" class="form-control" required
+                placeholder="â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ 8842">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label" for="bank-ifsc-input">Bank IFSC Code</label>
+                <input type="text" id="bank-ifsc-input" class="form-control" required placeholder="HDFC0001243">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bank-name-input">Bank Name & Branch</label>
+                <input type="text" id="bank-name-input" class="form-control" required
+                  placeholder="HDFC Bank - Indiranagar">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="bank-upi-input">UPI ID / VPA for Instant Payouts</label>
+              <input type="text" id="bank-upi-input" class="form-control" placeholder="priya.patel@okhdfcbank">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+              <i class="fas fa-save"></i> Save Payout Details Securely
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- Pane 4: My Profile -->
+      <div id="pane-owner-profile" class="owner-tab-pane" style="display: none;">
+        <div
+          style="max-width:640px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.75rem;">
+          <h3
+            style="font-family:var(--font-heading);font-size:1.25rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;">
+            <i class="fas fa-user-circle" style="color:var(--accent-cyan);"></i> Edit Owner Profile
+          </h3>
+          <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
+            Update your public name, contact number, and profile photo visible to renters.
+          </p>
+
+          <!-- Avatar Preview + Upload trigger -->
+          <div style="display:flex;align-items:center;gap:1.25rem;margin-bottom:1.5rem;">
+            <img id="owner-profile-avatar-preview"
+              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80"
+              alt="Profile photo"
+              style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--accent-cyan);flex-shrink:0;">
+            <div>
+              <button type="button" class="btn btn-outline btn-sm"
+                onclick="document.getElementById('owner-avatar-file').click()">
+                <i class="fas fa-camera"></i> Change Photo
+              </button>
+              <input type="file" id="owner-avatar-file" accept="image/*" style="display:none;"
+                onchange="OwnerProfile.onAvatarSelected(event)">
+              <p style="font-size:.75rem;color:var(--text-dim);margin-top:.4rem;">JPG, PNG &middot; Max 2 MB</p>
+            </div>
+          </div>
+
+          <form id="form-owner-profile">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;">
+              <div class="form-group">
+                <label class="form-label" for="owner-profile-name">Full Name</label>
+                <input type="text" id="owner-profile-name" class="form-control" required placeholder="e.g. Priya Patel">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="owner-profile-phone">Mobile Number</label>
+                <input type="tel" id="owner-profile-phone" class="form-control" required placeholder="+91 98765 43210">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email Address <span style="color:var(--text-dim);font-weight:400;">(cannot be
+                  changed)</span></label>
+              <input type="email" id="owner-profile-email" class="form-control" disabled
+                style="opacity:.55;cursor:not-allowed;">
+            </div>
+
+            <button type="submit" class="btn btn-emerald" style="margin-top:1rem;">
+              <i class="fas fa-save"></i> Save Profile Changes
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- =======================================================================
+       VIEW 4: ADMIN CONTROL CENTER
+       ======================================================================= -->
+  <main id="view-admin-dash" class="app-view">
+    <div class="dashboard-wrapper">
+      <div class="dash-header">
+        <div class="dash-user-meta">
+          <div class="dash-avatar-lg"
+            style="display: flex; align-items: center; justify-content: center; background: rgba(99, 102, 241, 0.2); color: var(--accent-purple); font-size: 1.8rem;">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="dash-title-wrap">
+            <h1>RideLink Operations & Trust Admin</h1>
+            <div class="dash-subtitle">Platform surveillance, KYC verification desk, vehicle listing moderation, and
+              audit logs</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card emerald">
+          <div class="kpi-icon-glow"><i class="fas fa-rupee-sign"></i></div>
+          <div class="kpi-label">Gross Platform GMV</div>
+          <div class="kpi-value" id="admin-kpi-gmv">â‚¹0</div>
+          <div class="kpi-subtext">Total transaction volume</div>
+        </div>
+
+        <div class="kpi-card purple">
+          <div class="kpi-icon-glow"><i class="fas fa-percentage"></i></div>
+          <div class="kpi-label">Platform Revenue (10%)</div>
+          <div class="kpi-value" id="admin-kpi-revenue">â‚¹0</div>
+          <div class="kpi-subtext">Net commission earned</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-glow"><i class="fas fa-car"></i></div>
+          <div class="kpi-label">Total Fleet</div>
+          <div class="kpi-value" id="admin-kpi-fleet">0</div>
+          <div class="kpi-subtext">Vehicles across India</div>
+        </div>
+
+        <div class="kpi-card amber">
+          <div class="kpi-icon-glow"><i class="fas fa-user-check"></i></div>
+          <div class="kpi-label">Registered Users</div>
+          <div class="kpi-value" id="admin-kpi-users">0</div>
+          <div class="kpi-subtext"><span id="admin-kpi-pending-kyc">0</span> pending KYC reviews</div>
+        </div>
+      </div>
+
+      <!-- Admin Tabs -->
+      <div class="dash-tabs">
+        <button class="dash-tab-btn admin-tab-btn active" data-pane="pane-admin-kyc">
+          <i class="fas fa-id-card"></i> KYC Verification Desk
+        </button>
+        <button class="dash-tab-btn admin-tab-btn" data-pane="pane-admin-fleet">
+          <i class="fas fa-car"></i> Fleet Moderation
+        </button>
+        <button class="dash-tab-btn admin-tab-btn" data-pane="pane-admin-users">
+          <i class="fas fa-users"></i> User Directory
+        </button>
+        <button class="dash-tab-btn admin-tab-btn" data-pane="pane-admin-audit">
+          <i class="fas fa-receipt"></i> Bookings & Payments Audit
+        </button>
+      </div>
+
+      <!-- Pane 1: KYC Queue -->
+      <div id="pane-admin-kyc" class="admin-tab-pane active">
+        <div class="data-table-card">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>User Profile</th>
+                  <th>Role</th>
+                  <th>Driving Licence (Masked)</th>
+                  <th>Aadhaar Number (Masked)</th>
+                  <th>KYC Status</th>
+                  <th>Desk Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-kyc-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pane 2: Fleet Moderation -->
+      <div id="pane-admin-fleet" class="admin-tab-pane" style="display: none;">
+        <div class="data-table-card">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Vehicle</th>
+                  <th>Host</th>
+                  <th>City</th>
+                  <th>Price Rate</th>
+                  <th>Listing Status</th>
+                  <th>Moderation</th>
+                </tr>
+              </thead>
+              <tbody id="admin-vehicles-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pane 3: Users Directory -->
+      <div id="pane-admin-users" class="admin-tab-pane" style="display: none;">
+        <div class="data-table-card">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Phone Number</th>
+                  <th>KYC Status</th>
+                  <th>Member Since</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pane 4: Bookings Audit -->
+      <div id="pane-admin-audit" class="admin-tab-pane" style="display: none;">
+        <div class="data-table-card">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Booking Reference</th>
+                  <th>Customer</th>
+                  <th>Vehicle</th>
+                  <th>Rental Dates</th>
+                  <th>Amount</th>
+                  <th>Trip Status</th>
+                  <th>Invoice</th>
+                </tr>
+              </thead>
+              <tbody id="admin-bookings-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- =======================================================================
+       Website Footer
+       ======================================================================= -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo" onclick="navigateTo('marketplace')">
+            <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+            <span>Ride<span class="brand-highlight">Link</span></span>
+          </div>
+          <p class="footer-desc">
+            Indiaâ€™s premier peer-to-peer vehicle sharing and mobility ecosystem. Rent verified cars, SUVs, bikes, and
+            EVs across major Indian metropolitan areas with transparent GST pricing, instant sandbox verification, and
+            comprehensive damage protection.
+          </p>
+          <div class="footer-badges">
+            <span class="footer-trust-chip"><i class="fas fa-shield-alt"></i> 256-Bit SSL Encrypted</span>
+            <span class="footer-trust-chip"><i class="fas fa-check-circle"></i> MoRTH DL Verified</span>
+            <span class="footer-trust-chip"><i class="fas fa-percent"></i> 18% GST Compliant</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Explore Mobility</h4>
+          <ul class="footer-links">
+            <li><a href="#"
+                onclick="event.preventDefault(); navigateTo('marketplace'); const cat = document.getElementById('filter-category'); if (cat) { cat.value='all'; } if (window.filterVehicles) filterVehicles();"
+                class="footer-link"><i class="fas fa-car"></i> Cars &amp; SUVs</a></li>
+            <li><a href="#"
+                onclick="event.preventDefault(); navigateTo('marketplace'); const cat = document.getElementById('filter-category'); if (cat) { cat.value='Electric'; } if (window.filterVehicles) filterVehicles();"
+                class="footer-link"><i class="fas fa-charging-station"></i> Electric Vehicles</a></li>
+            <li><a href="#"
+                onclick="event.preventDefault(); navigateTo('marketplace'); const cat = document.getElementById('filter-category'); if (cat) { cat.value='Bike'; } if (window.filterVehicles) filterVehicles();"
+                class="footer-link"><i class="fas fa-motorcycle"></i> Two-Wheelers</a></li>
+            <li><a href="#"
+                onclick="event.preventDefault(); navigateTo('marketplace'); const cat = document.getElementById('filter-category'); if (cat) { cat.value='Luxury'; } if (window.filterVehicles) filterVehicles();"
+                class="footer-link"><i class="fas fa-crown"></i> Luxury Fleet</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Host Community</h4>
+          <ul class="footer-links">
+            <li><a href="#"
+                onclick="event.preventDefault(); const u = api.getUser(); if (!u) { openModal('modal-auth'); } else if (u.role === 'owner') { openModal('modal-add-vehicle'); } else { showToast('Host access required. Switch account or register as Host.', 'warning'); }"
+                class="footer-link"><i class="fas fa-plus-circle"></i> List Your Vehicle</a></li>
+            <li><a href="/terms.html#section-4" target="_blank" class="footer-link"><i class="fas fa-car-side"></i> Host
+                Guidelines</a></li>
+            <li><a href="/terms.html#section-11" target="_blank" class="footer-link"><i class="fas fa-shield-alt"></i>
+                Protection &amp; Shield</a></li>
+            <li><a href="/terms.html#section-7" target="_blank" class="footer-link"><i class="fas fa-calculator"></i>
+                Earnings &amp; Payouts</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Legal &amp; Trust</h4>
+          <ul class="footer-links">
+            <li><a href="/terms.html" target="_blank" class="footer-link"
+                style="color:var(--accent-cyan);font-weight:600;"><i class="fas fa-file-contract"></i> Terms and
+                Conditions</a></li>
+            <li><a href="/privacy.html" target="_blank" class="footer-link"
+                style="color:var(--accent-emerald);font-weight:600;"><i class="fas fa-user-shield"></i> Privacy
+                Policy</a></li>
+            <li><a href="/terms.html#section-8" target="_blank" class="footer-link"><i class="fas fa-undo"></i>
+                Cancellation &amp; Refund Policy</a></li>
+            <li><a href="/terms.html#section-16" target="_blank" class="footer-link"><i class="fas fa-envelope"></i>
+                Grievance Officer</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 RideLink Mobility Technologies Pvt. Ltd. All rights reserved. Operating in compliance with the
+          Motor Vehicles Act 1988, DPDP Act 2023, and Information Technology Act 2000.</p>
+        <div class="footer-legal-links">
+          <a href="/terms.html" target="_blank">Terms &amp; Conditions</a>
+          <a href="/privacy.html" target="_blank">Privacy Policy</a>
+          <a href="/terms.html#section-8" target="_blank">Refund Rules</a>
+          <a href="/terms.html#section-16" target="_blank">Support Desk</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =======================================================================
+       MODAL 1: VEHICLE DETAIL & LIVE PRICING CALCULATOR
+       ======================================================================= -->
+  <div id="modal-vehicle-detail" class="modal-overlay">
+    <div class="modal-content modal-xl">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-car" style="color: var(--accent-cyan);"></i>
+          <span id="detail-title">Vehicle Details</span>
+        </div>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="vehicle-detail-layout">
+          <!-- Left Column: Gallery & Details -->
+          <div>
+            <div class="gallery-container">
+              <div class="gallery-main">
+                <img src="" id="detail-gallery-main-img" alt="Vehicle Large">
+              </div>
+              <div class="gallery-thumbs" id="detail-gallery-thumbs"></div>
+            </div>
+
+            <!-- Specs Grid -->
+            <div class="detail-specs-grid">
+              <div class="spec-item">
+                <i class="fas fa-gas-pump spec-icon"></i>
+                <div>
+                  <div class="spec-text-label">Fuel / Power</div>
+                  <div class="spec-text-value" id="detail-fuel">Electric</div>
+                </div>
+              </div>
+              <div class="spec-item">
+                <i class="fas fa-cogs spec-icon"></i>
+                <div>
+                  <div class="spec-text-label">Transmission</div>
+                  <div class="spec-text-value" id="detail-transmission">Automatic</div>
+                </div>
+              </div>
+              <div class="spec-item">
+                <i class="fas fa-users spec-icon"></i>
+                <div>
+                  <div class="spec-text-label">Capacity</div>
+                  <div class="spec-text-value" id="detail-seating">5 Seats</div>
+                </div>
+              </div>
+              <div class="spec-item">
+                <i class="fas fa-tachometer-alt spec-icon"></i>
+                <div>
+                  <div class="spec-text-label">Mileage / Range</div>
+                  <div class="spec-text-value" id="detail-mileage">437 km</div>
+                </div>
+              </div>
+              <div class="spec-item">
+                <i class="fas fa-hashtag spec-icon"></i>
+                <div>
+                  <div class="spec-text-label">Registration</div>
+                  <div class="spec-text-value" id="detail-reg-num">KA-03-EV-9821</div>
+                </div>
+              </div>
+              <div class="spec-item">
+                <i class="fas fa-shield-alt spec-icon"></i>
+                <div>
+                  <div class="spec-text-label">Refundable Deposit</div>
+                  <div class="spec-text-value" id="detail-deposit">â‚¹3,000</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Location & Interactive Map Pinpoint -->
+            <div style="margin: 1.25rem 0;">
+              <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 0.35rem;">
+                <i class="fas fa-map-pin" style="color: var(--accent-cyan);"></i> Pickup Location & Navigation
+              </h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;" id="detail-location">
+                Bangalore</p>
+
+              <!-- Map Pinpoint Box -->
+              <div style="
+                height: 140px;
+                background: linear-gradient(135deg, #111827 0%, #1E293B 100%), radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.2) 0%, transparent 60%);
+                border: 1px solid var(--border-subtle);
+                border-radius: var(--radius-md);
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <!-- Grid Map lines simulation -->
+                <div
+                  style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 24px 24px;">
+                </div>
+
+                <div style="position: relative; z-index: 2; text-align: center;">
+                  <div
+                    style="width: 44px; height: 44px; border-radius: 50%; background: rgba(6, 182, 212, 0.2); border: 2px solid var(--accent-cyan); display: inline-flex; align-items: center; justify-content: center; color: var(--accent-cyan); font-size: 1.2rem; box-shadow: 0 0 20px rgba(6, 182, 212, 0.6); animation: pulseEmerald 2s infinite;">
+                    <i class="fas fa-map-marker-alt"></i>
+                  </div>
+                  <div style="font-size: 0.75rem; font-weight: 700; color: #fff; margin-top: 0.35rem;">GPS Verified
+                    Pickup Hub</div>
+                  <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer"
+                    style="font-size: 0.7rem; color: var(--accent-cyan); text-decoration: underline; margin-top: 0.15rem; display: inline-block;">
+                    <i class="fas fa-directions"></i> Get Live Directions
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin: 1.25rem 0;">
+              <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 0.35rem;">Vehicle Overview
+              </h4>
+              <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;" id="detail-desc"></p>
+            </div>
+
+            <!-- Features -->
+            <div style="margin: 1.25rem 0;">
+              <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 0.5rem;">Key Features &
+                Equipments</h4>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.45rem;" id="detail-features-list"></div>
+            </div>
+
+            <!-- Verified Host Card -->
+            <div class="owner-card">
+              <img src="" id="detail-owner-avatar" alt="Host">
+              <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <strong id="detail-owner-name">Host Name</strong>
+                  <span id="detail-owner-badge" class="badge badge-verified">VERIFIED</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.15rem;">
+                  Verified Vehicle Host â€¢ 100% Response Rate â€¢ Instant Handover
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer Reviews -->
+            <div style="margin-top: 1.5rem;">
+              <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 0.75rem;">Verified Customer
+                Ratings</h4>
+              <div id="detail-reviews-list"></div>
+            </div>
+          </div>
+
+          <!-- Right Column: Live Booking Calculator Widget -->
+          <div>
+            <div class="calc-box" id="calc-booking-box">
+              <div class="calc-rates-header">
+                <div>
+                  <span class="calc-price-large" id="calc-header-rate">â‚¹2,800</span>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);" id="calc-header-unit">/day</span>
+                </div>
+                <div
+                  style="display: flex; align-items: center; gap: 0.4rem; color: #FBBF24; font-size: 0.85rem; font-weight: 700;">
+                  <i class="fas fa-star"></i>
+                  <span id="detail-rating">4.9</span>
+                  <span style="color: var(--text-dim); font-weight: normal;" id="detail-trips-count">(24 trips)</span>
+                </div>
+              </div>
+
+              <!-- Rental Type Toggle -->
+              <div class="calc-tabs">
+                <button type="button" class="calc-tab-btn active" id="calc-tab-daily"
+                  onclick="VehicleDetail.setDurationType('days')">
+                  Daily Rental
+                </button>
+                <button type="button" class="calc-tab-btn" id="calc-tab-hourly"
+                  onclick="VehicleDetail.setDurationType('hours')">
+                  Hourly Rental
+                </button>
+              </div>
+
+              <!-- Dates and Duration -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="calc-start-date">Pickup Date</label>
+                  <input type="date" id="calc-start-date" class="form-control" onchange="VehicleDetail.recalculate()">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="calc-end-date">Drop-off Date</label>
+                  <input type="date" id="calc-end-date" class="form-control" onchange="VehicleDetail.recalculate()">
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" id="calc-count-label" for="calc-count-input">Number of Days:</label>
+                <input type="number" id="calc-count-input" class="form-control" min="1" max="30" value="2"
+                  onchange="VehicleDetail.recalculate()">
+              </div>
+
+              <!-- Optional Rental Add-ons -->
+              <div style="margin: 0.5rem 0;">
+                <label class="form-label" style="margin-bottom: 0.4rem;">Select Trip Add-ons (Optional):</label>
+                <div style="display: flex; flex-direction: column; gap: 0.45rem;">
+                  <label
+                    style="display: flex; align-items: center; justify-content: space-between; font-size: 0.825rem; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); cursor: pointer;">
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">
+                      <input type="checkbox" class="calc-addon-check" value="helmet"
+                        onchange="VehicleDetail.recalculate()">
+                      <span>â›‘ï¸ Dual DOT Helmets & Gear</span>
+                    </span>
+                    <strong style="color: var(--accent-emerald);">+â‚¹99</strong>
+                  </label>
+                  <label
+                    style="display: flex; align-items: center; justify-content: space-between; font-size: 0.825rem; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); cursor: pointer;">
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">
+                      <input type="checkbox" class="calc-addon-check" value="childSeat"
+                        onchange="VehicleDetail.recalculate()">
+                      <span>ðŸ’º Child Safety Seat ISOFIX</span>
+                    </span>
+                    <strong style="color: var(--accent-emerald);">+â‚¹199</strong>
+                  </label>
+                  <label
+                    style="display: flex; align-items: center; justify-content: space-between; font-size: 0.825rem; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); cursor: pointer;">
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">
+                      <input type="checkbox" class="calc-addon-check" value="unlimitedKm"
+                        onchange="VehicleDetail.recalculate()">
+                      <span>âš¡ Unlimited Kilometers Shield</span>
+                    </span>
+                    <strong style="color: var(--accent-emerald);">+â‚¹499</strong>
+                  </label>
+                  <label
+                    style="display: flex; align-items: center; justify-content: space-between; font-size: 0.825rem; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); cursor: pointer;">
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">
+                      <input type="checkbox" class="calc-addon-check" value="doorstepDelivery"
+                        onchange="VehicleDetail.recalculate()">
+                      <span>ðŸ“ Doorstep Delivery & Handover</span>
+                    </span>
+                    <strong style="color: var(--accent-emerald);">+â‚¹299</strong>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="calc-special-notes">Special Trip Notes (Optional)</label>
+                <input type="text" id="calc-special-notes" class="form-control"
+                  placeholder="e.g. Airport delivery, Fast charger cable">
+              </div>
+
+              <!-- Itemized GST Pricing Breakdown -->
+              <div class="calc-breakdown">
+                <div class="calc-breakdown-row">
+                  <span id="calc-base-label">Base Rental:</span>
+                  <span id="calc-base-amount">â‚¹5,600</span>
+                </div>
+                <div class="calc-breakdown-row" id="calc-addons-row" style="display: none; color: var(--accent-cyan);">
+                  <span>Selected Trip Add-ons:</span>
+                  <span id="calc-addons-amount">â‚¹0</span>
+                </div>
+                <div class="calc-breakdown-row">
+                  <span>24/7 Roadside Shield & Insurance:</span>
+                  <span id="calc-shield-amount">â‚¹299</span>
+                </div>
+                <div class="calc-breakdown-row tax-row">
+                  <span>CGST (9%):</span>
+                  <span id="calc-cgst-amount">â‚¹530.91</span>
+                </div>
+                <div class="calc-breakdown-row tax-row">
+                  <span>SGST (9%):</span>
+                  <span id="calc-sgst-amount">â‚¹530.91</span>
+                </div>
+                <div class="calc-breakdown-row">
+                  <span>Refundable Security Deposit:</span>
+                  <span id="calc-deposit-amount">â‚¹3,000</span>
+                </div>
+                <div class="calc-breakdown-row total-row">
+                  <span>Grand Total (All Inclusive):</span>
+                  <span class="total-highlight" id="calc-grand-total">â‚¹9,960.82</span>
+                </div>
+              </div>
+
+              <!-- Rental Conditions & Policy Acceptance -->
+              <div class="rental-conditions-card" id="calc-terms-container">
+                <div class="rental-conditions-title">
+                  <i class="fas fa-file-contract"></i> Rental Conditions &amp; Trip Guidelines
+                </div>
+                <ul class="rental-conditions-points">
+                  <li><i class="fas fa-id-card"
+                      style="color:var(--accent-cyan);font-size:0.7rem;margin-top:0.15rem;"></i> Original Driving
+                    License + Aadhaar required at vehicle handover.</li>
+                  <li><i class="fas fa-gas-pump"
+                      style="color:var(--accent-emerald);font-size:0.7rem;margin-top:0.15rem;"></i> Fuel Policy: Return
+                    with same fuel/charge level as recorded at pickup.</li>
+                  <li><i class="fas fa-undo" style="color:var(--accent-amber);font-size:0.7rem;margin-top:0.15rem;"></i>
+                    Free cancellation up to 6 hours before pickup; security deposit refunded post-trip.</li>
+                  <li><i class="fas fa-shield-alt"
+                      style="color:var(--accent-purple);font-size:0.7rem;margin-top:0.15rem;"></i> Includes 24/7
+                    Roadside Assistance &amp; Damage Protection with standard deductible.</li>
+                </ul>
+                <label class="terms-checkbox-label" for="calc-terms-agree" style="font-size: 0.79rem;">
+                  <input type="checkbox" id="calc-terms-agree">
+                  <span>
+                    I accept the applicable <a href="/terms.html#section-5" target="_blank">Rental Conditions</a>, <a
+                      href="/terms.html#section-7" target="_blank">Charges</a>, <a href="/terms.html#section-8"
+                      target="_blank">Cancellation Policy</a>, and <a href="/terms.html#section-9"
+                      target="_blank">Return Rules</a>.
+                  </span>
+                </label>
+                <span id="calc-terms-error" class="field-error"
+                  style="display:none;font-size:0.75rem;color:#FB7185;margin-top:0.35rem;"></span>
+              </div>
+
+              <button class="btn btn-primary btn-block btn-lg" onclick="VehicleDetail.proceedToBooking()">
+                <i class="fas fa-lock"></i> Reserve & Proceed to Pay
+              </button>
+
+              <div style="font-size: 0.75rem; color: var(--text-dim); text-align: center;">
+                <i class="fas fa-shield-alt" style="color: var(--accent-emerald);"></i> Free cancellation up to 6 hours
+                before pickup
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 2: AUTHENTICATION & DEMO SWITCHER
+       ======================================================================= -->
+  <div id="modal-auth" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-user-circle" style="color: var(--accent-cyan);"></i> RideLink Account
+        </div>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Auth Tabs -->
+        <div class="dash-tabs" style="margin-bottom: 1.25rem;">
+          <button class="dash-tab-btn auth-tab-btn active" data-target="tab-login">Sign In</button>
+          <button class="dash-tab-btn auth-tab-btn" data-target="tab-register">Register</button>
+          <button class="dash-tab-btn auth-tab-btn" data-target="tab-forgot">Forgot Password</button>
+          <button class="dash-tab-btn auth-tab-btn" data-target="auth-pane-demo">Quick Demo</button>
+        </div>
+
+        <!-- 1. LOGIN PANE -->
+        <div id="tab-login" class="auth-tab-content active">
+          <div id="login-error-banner"
+            style="display:none; background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.3); border-radius:var(--radius-md); padding:0.65rem 1rem; margin-bottom:1rem; font-size:0.85rem; color:#FB7185;">
+          </div>
+
+          <button type="button" id="btn-google-signin" data-action="google-signin" data-role="customer" style="width:100%;display:flex;align-items:center;justify-content:center;gap:0.75rem;
+                   background:rgba(255,255,255,0.06);border:1px solid var(--border-hover);
+                   border-radius:var(--radius-md);padding:0.75rem 1.25rem;cursor:pointer;
+                   color:var(--text-main);font-size:0.9rem;font-weight:600;margin-bottom:1rem;
+                   transition:all 0.2s;">
+            <svg width="20" height="20" viewBox="0 0 48 48" style="flex-shrink:0;">
+              <path fill="#FFC107"
+                d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.8 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z" />
+              <path fill="#FF3D00"
+                d="M6.3 14.7l6.6 4.8C14.7 16 19.1 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.8 29.5 4 24 4 16.2 4 9.4 8.3 6.3 14.7z" />
+              <path fill="#4CAF50"
+                d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.4 35.3 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.3C9.4 35.7 16.2 44 24 44z" />
+              <path fill="#1976D2"
+                d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.6l6.2 5.2C37 36.9 44 31 44 24c0-1.3-.1-2.6-.4-3.9z" />
+            </svg>
+            Continue with Google
+          </button>
+
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <div style="flex:1;height:1px;background:var(--border-subtle);"></div>
+            <span style="font-size:0.75rem;color:var(--text-dim);font-weight:600;">OR</span>
+            <div style="flex:1;height:1px;background:var(--border-subtle);"></div>
+          </div>
+
+          <form id="form-login">
+            <div class="form-group">
+              <label class="form-label" for="login-email">Email Address</label>
+              <input type="email" id="login-email" class="form-control" autocomplete="email"
+                placeholder="rahul@customer.com">
+              <span id="login-email-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;margin-top:0.25rem;"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-password"
+                style="display:flex;justify-content:space-between;align-items:center;">
+                Password
+                <button type="button"
+                  style="background:none;border:none;cursor:pointer;color:var(--accent-cyan);font-size:0.78rem;font-weight:600;"
+                  onclick="AuthUI && AuthUI.openForgotPassword()">Forgot password?</button>
+              </label>
+              <input type="password" id="login-password" class="form-control" autocomplete="current-password"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+              <span id="login-password-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;margin-top:0.25rem;"></span>
+            </div>
+            <button type="submit" id="btn-login-submit" class="btn btn-primary btn-block">
+              <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+          </form>
+          <p style="text-align:center;font-size:0.8rem;color:var(--text-dim);margin-top:1rem;">
+            No account? <button type="button"
+              style="background:none;border:none;cursor:pointer;color:var(--accent-cyan);font-weight:600;"
+              onclick="AuthUI && AuthUI.openRegister()">Create one free</button>
+          </p>
+        </div>
+
+        <!-- 2. REGISTER PANE -->
+        <div id="tab-register" class="auth-tab-content">
+          <div id="register-error-banner"
+            style="display:none; background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.3); border-radius:var(--radius-md); padding:0.65rem 1rem; margin-bottom:1rem; font-size:0.85rem; color:#FB7185;">
+          </div>
+
+          <button type="button" id="btn-google-signup" data-action="google-signin" data-role="customer" style="width:100%;display:flex;align-items:center;justify-content:center;gap:0.75rem;
+                   background:rgba(255,255,255,0.06);border:1px solid var(--border-hover);
+                   border-radius:var(--radius-md);padding:0.75rem 1.25rem;cursor:pointer;
+                   color:var(--text-main);font-size:0.9rem;font-weight:600;margin-bottom:1rem;transition:all 0.2s;">
+            <svg width="20" height="20" viewBox="0 0 48 48" style="flex-shrink:0;">
+              <path fill="#FFC107"
+                d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.8 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z" />
+              <path fill="#FF3D00"
+                d="M6.3 14.7l6.6 4.8C14.7 16 19.1 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.8 29.5 4 24 4 16.2 4 9.4 8.3 6.3 14.7z" />
+              <path fill="#4CAF50"
+                d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.4 35.3 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.3C9.4 35.7 16.2 44 24 44z" />
+              <path fill="#1976D2"
+                d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.6l6.2 5.2C37 36.9 44 31 44 24c0-1.3-.1-2.6-.4-3.9z" />
+            </svg>
+            Continue with Google
+          </button>
+
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <div style="flex:1;height:1px;background:var(--border-subtle);"></div>
+            <span style="font-size:0.75rem;color:var(--text-dim);font-weight:600;">OR</span>
+            <div style="flex:1;height:1px;background:var(--border-subtle);"></div>
+          </div>
+
+          <form id="form-register">
+            <div class="form-group">
+              <label class="form-label" for="reg-name">Full Name</label>
+              <input type="text" id="reg-name" class="form-control" autocomplete="name" placeholder="e.g. Ananya Sen">
+              <span id="reg-name-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-email">Email Address</label>
+              <input type="email" id="reg-email" class="form-control" autocomplete="email"
+                placeholder="ananya@example.com">
+              <span id="reg-email-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-phone">Mobile Number</label>
+              <input type="tel" id="reg-phone" class="form-control" autocomplete="tel" placeholder="+91 98123 45678">
+              <span id="reg-phone-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Password <span
+                  style="font-size:0.72rem;color:var(--text-dim);">(min 6 chars)</span></label>
+              <input type="password" id="reg-password" class="form-control" autocomplete="new-password"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+              <span id="reg-password-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-confirm-password">Confirm Password</label>
+              <input type="password" id="reg-confirm-password" class="form-control" autocomplete="new-password"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+              <span id="reg-confirm-password-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">I want to join as:</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <label
+                  style="background:rgba(255,255,255,0.03);border:1px solid var(--border-subtle);padding:0.65rem;border-radius:var(--radius-md);font-size:0.85rem;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">
+                  <input type="radio" name="reg-role" value="customer" checked> Customer (Rent)
+                </label>
+                <label
+                  style="background:rgba(255,255,255,0.03);border:1px solid var(--border-subtle);padding:0.65rem;border-radius:var(--radius-md);font-size:0.85rem;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">
+                  <input type="radio" name="reg-role" value="owner"> Host (Rent Out)
+                </label>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 1rem; margin-bottom: 1.15rem;">
+              <label class="terms-checkbox-label" for="reg-terms-check">
+                <input type="checkbox" id="reg-terms-check">
+                <span>
+                  I have read and agree to the <a href="/terms.html" target="_blank">Terms and Conditions</a> and <a
+                    href="/privacy.html" target="_blank">Privacy Policy</a>.
+                </span>
+              </label>
+              <span id="reg-terms-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;margin-top:0.35rem;"></span>
+            </div>
+            <button type="submit" id="btn-register-submit" class="btn btn-emerald btn-block">
+              <i class="fas fa-user-plus"></i> Create Account
+            </button>
+          </form>
+        </div>
+
+        <!-- 3. FORGOT PASSWORD PANE -->
+        <div id="tab-forgot" class="auth-tab-content">
+          <form id="form-forgot-password">
+            <div class="form-group">
+              <label class="form-label" for="forgot-email">Your Registered Email</label>
+              <input type="email" id="forgot-email" class="form-control" placeholder="yourname@example.com">
+              <span id="forgot-email-error" class="field-error"
+                style="display:none;font-size:0.78rem;color:#FB7185;"></span>
+            </div>
+            <button type="submit" id="btn-forgot-submit" class="btn btn-primary btn-block">
+              <i class="fas fa-paper-plane"></i> Send OTP to Email
+            </button>
+          </form>
+
+          <div id="forgot-otp-section"
+            style="display:none; margin-top:1.25rem; border-top:1px solid var(--border-subtle); padding-top:1.25rem;">
+            <p id="forgot-otp-hint"
+              style="font-size:0.82rem;color:var(--accent-amber);margin-bottom:0.75rem;font-weight:600;"></p>
+            <form id="form-reset-password">
+              <div class="form-group">
+                <label class="form-label" for="forgot-otp">Enter 6-Digit OTP</label>
+                <input type="text" id="forgot-otp" class="form-control" maxlength="6" placeholder="123456"
+                  inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="forgot-new-password">New Password</label>
+                <input type="password" id="forgot-new-password" class="form-control"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢ (min 6 chars)">
+              </div>
+              <button type="submit" id="btn-reset-submit" class="btn btn-emerald btn-block">
+                <i class="fas fa-key"></i> Reset Password
+              </button>
+            </form>
+          </div>
+
+          <p style="text-align:center;font-size:0.8rem;color:var(--text-dim);margin-top:1rem;">
+            Remembered it? <button type="button"
+              style="background:none;border:none;cursor:pointer;color:var(--accent-cyan);font-weight:600;"
+              onclick="AuthUI && AuthUI.openLogin()">Sign in</button>
+          </p>
+        </div>
+
+        <!-- 4. Quick Demo Switcher -->
+        <div id="auth-pane-demo" class="auth-tab-content">
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Select any pre-configured persona to test the platform instantly:
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <button type="button" class="btn btn-outline btn-block"
+              style="justify-content: flex-start; padding: 0.75rem 1rem;" onclick="doDemoLogin('customer')">
+              <i class="fas fa-user-circle" style="font-size: 1.4rem; color: var(--accent-cyan);"></i>
+              <div style="text-align: left; margin-left: 0.5rem;">
+                <div style="font-weight: 700;">Customer (Rahul Sharma)</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">Explore, book vehicles, Razorpay checkout, KYC
+                  verified</div>
+              </div>
+            </button>
+            <button type="button" class="btn btn-outline btn-block"
+              style="justify-content: flex-start; padding: 0.75rem 1rem;" onclick="doDemoLogin('owner')">
+              <i class="fas fa-car" style="font-size: 1.4rem; color: var(--accent-emerald);"></i>
+              <div style="text-align: left; margin-left: 0.5rem;">
+                <div style="font-weight: 700;">Vehicle Host (Priya Patel)</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">List vehicles, accept bookings, bank payout
+                  settings</div>
+              </div>
+            </button>
+            <button type="button" class="btn btn-outline btn-block"
+              style="justify-content: flex-start; padding: 0.75rem 1rem;" onclick="doDemoLogin('admin')">
+              <i class="fas fa-shield-alt" style="font-size: 1.4rem; color: var(--accent-purple);"></i>
+              <div style="text-align: left; margin-left: 0.5rem;">
+                <div style="font-weight: 700;">Platform Admin (RideLink Desk)</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">KYC review, fleet moderation, financial audit
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 2b: GOOGLE SIGN-IN INTERACTIVE SELECTOR (Sandbox & Instant Test)
+       ======================================================================= -->
+  <div id="modal-google-signin" class="modal-overlay">
+    <div class="modal-content" style="max-width: 440px;">
+      <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <svg width="24" height="24" viewBox="0 0 48 48">
+            <path fill="#FFC107"
+              d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.8 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z" />
+            <path fill="#FF3D00"
+              d="M6.3 14.7l6.6 4.8C14.7 16 19.1 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.8 29.5 4 24 4 16.2 4 9.4 8.3 6.3 14.7z" />
+            <path fill="#4CAF50"
+              d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.4 35.3 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.3C9.4 35.7 16.2 44 24 44z" />
+            <path fill="#1976D2"
+              d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.6l6.2 5.2C37 36.9 44 31 44 24c0-1.3-.1-2.6-.4-3.9z" />
+          </svg>
+          <span style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Sign in with
+            Google</span>
+        </div>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body" style="padding-top: 0.5rem;">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Choose a Google account to continue to <strong>RideLink Mobility</strong>
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.25rem;">
+          <!-- Account 1 -->
+          <div class="google-acc-item"
+            onclick="FirebaseAuth.completeGoogleSandbox('rahul.sharma@gmail.com', 'Rahul Sharma', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80')"
+            style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); background: rgba(255,255,255,0.04); border: 1px solid var(--border-subtle); cursor: pointer; transition: all 0.2s;">
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
+              style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+            <div style="flex: 1;">
+              <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);">Rahul Sharma</div>
+              <div style="font-size: 0.75rem; color: var(--text-dim);">rahul.sharma@gmail.com</div>
+            </div>
+            <i class="fas fa-chevron-right" style="color: var(--text-dim); font-size: 0.8rem;"></i>
+          </div>
+
+          <!-- Account 2 -->
+          <div class="google-acc-item"
+            onclick="FirebaseAuth.completeGoogleSandbox('priya.patel@gmail.com', 'Priya Patel', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80')"
+            style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); background: rgba(255,255,255,0.04); border: 1px solid var(--border-subtle); cursor: pointer; transition: all 0.2s;">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80"
+              style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+            <div style="flex: 1;">
+              <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);">Priya Patel</div>
+              <div style="font-size: 0.75rem; color: var(--text-dim);">priya.patel@gmail.com</div>
+            </div>
+            <i class="fas fa-chevron-right" style="color: var(--text-dim); font-size: 0.8rem;"></i>
+          </div>
+        </div>
+
+        <!-- Custom Google Account -->
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 1rem; margin-top: 0.5rem;">
+          <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dim);">Or sign in
+            with any custom Google account:</div>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <input type="text" id="custom-google-name" class="form-control" placeholder="Your Full Name"
+              style="flex: 1; font-size: 0.85rem;">
+            <input type="email" id="custom-google-email" class="form-control" placeholder="your.name@gmail.com"
+              style="flex: 1.2; font-size: 0.85rem;">
+          </div>
+          <button type="button" class="btn btn-primary btn-block btn-sm" onclick="
+            const name = document.getElementById('custom-google-name').value.trim() || 'Google User';
+            const email = document.getElementById('custom-google-email').value.trim() || 'google.user@gmail.com';
+            FirebaseAuth.completeGoogleSandbox(email, name, 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80');
+          ">
+            <i class="fab fa-google"></i> Continue with Custom Google Account
+          </button>
+        </div>
+
+        <div
+          style="margin-top: 1rem; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.25); border-radius: 6px; padding: 0.6rem 0.8rem; font-size: 0.75rem; color: #a5f3fc;">
+          <i class="fas fa-info-circle"></i> <strong>Sandbox Mode:</strong> Testing Google Sign-In with instant account
+          simulation. To enable the live Google OAuth pop-up, paste your Firebase keys in <code>.env</code>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 3: KYC IDENTITY VERIFICATION (DL & AADHAAR)
+       ======================================================================= -->
+  <div id="modal-kyc-verify" class="modal-overlay">
+    <div class="modal-content" style="max-width: 540px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-id-card" style="color: var(--accent-cyan);"></i> Identity Verification (KYC)
+        </div>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Info banner -->
+        <div
+          style="background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.25); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.75rem;">
+          <i class="fas fa-shield-alt"
+            style="color: var(--accent-cyan); font-size: 1.1rem; margin-top: 0.1rem; flex-shrink: 0;"></i>
+          <div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem;">Secure Sandbox Verification</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+              Verified via UIDAI &amp; MoRTH sandbox API. Numbers are masked before storage. Completing KYC unlocks
+              instant booking without security deposit hold.
+            </div>
+          </div>
+        </div>
+
+        <form id="form-kyc-submit">
+          <!-- Driving Licence Section -->
+          <div
+            style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.1rem 1.25rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem;">
+              <div
+                style="width: 32px; height: 32px; border-radius: 50%; background: rgba(6,182,212,0.15); display: flex; align-items: center; justify-content: center; color: var(--accent-cyan); font-size: 0.9rem; flex-shrink: 0;">
+                <i class="fas fa-car"></i>
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 0.95rem;">Driving Licence</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">Issued by MoRTH (Ministry of Road Transport
+                  &amp; Highways)</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.85rem;">
+              <label class="form-label" for="kyc-dl-input">
+                DL Number <span style="color: #FB7185;">*</span>
+                <span style="font-size: 0.7rem; color: var(--text-dim); font-weight: 400; margin-left: 0.4rem;">e.g.
+                  KA-04-2019-0012345</span>
+              </label>
+              <input type="text" id="kyc-dl-input" class="form-control" placeholder="e.g. KA-04-2019-0012345"
+                maxlength="20" style="font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase;"
+                oninput="this.value = this.value.toUpperCase()" required>
+              <span id="kyc-dl-error"
+                style="display:none; font-size:0.78rem; color:#FB7185; margin-top:0.25rem;"></span>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="kyc-dl-file">
+                Upload DL Document
+                <span style="font-size: 0.7rem; color: var(--text-dim); font-weight: 400; margin-left: 0.4rem;">(PDF /
+                  JPG / PNG &middot; sandbox simulated)</span>
+              </label>
+              <input type="file" id="kyc-dl-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
+                onchange="KycModal.onFileChange('dl', this)">
+              <div id="kyc-dl-dropzone" onclick="document.getElementById('kyc-dl-file').click()"
+                ondragover="event.preventDefault(); this.classList.add('drag-over')"
+                ondragleave="this.classList.remove('drag-over')" ondrop="KycModal.onFileDrop('dl', event)"
+                style="border: 2px dashed var(--border-subtle); border-radius: var(--radius-md); padding: 0.85rem 1rem; cursor: pointer; text-align: center; transition: all 0.2s; background: rgba(255,255,255,0.02);">
+                <i class="fas fa-cloud-upload-alt"
+                  style="font-size: 1.3rem; color: var(--text-dim); margin-bottom: 0.3rem; display: block;"></i>
+                <div id="kyc-dl-file-label" style="font-size: 0.82rem; color: var(--text-dim);">Click or drag &amp; drop
+                  your DL document here</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aadhaar Section -->
+          <div
+            style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.1rem 1.25rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem;">
+              <div
+                style="width: 32px; height: 32px; border-radius: 50%; background: rgba(16,185,129,0.15); display: flex; align-items: center; justify-content: center; color: var(--accent-emerald); font-size: 0.9rem; flex-shrink: 0;">
+                <i class="fas fa-fingerprint"></i>
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 0.95rem;">Aadhaar Card</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">Issued by UIDAI &middot; 12-digit unique
+                  identity number</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.85rem;">
+              <label class="form-label" for="kyc-aadhaar-input">
+                Aadhaar Number <span style="color: #FB7185;">*</span>
+                <span style="font-size: 0.7rem; color: var(--text-dim); font-weight: 400; margin-left: 0.4rem;">12-digit
+                  number</span>
+              </label>
+              <input type="text" id="kyc-aadhaar-input" class="form-control" placeholder="e.g. 1234 5678 9012"
+                maxlength="14" inputmode="numeric" style="font-family: monospace; letter-spacing: 0.1em;"
+                oninput="KycModal.formatAadhaar(this)" required>
+              <span id="kyc-aadhaar-error"
+                style="display:none; font-size:0.78rem; color:#FB7185; margin-top:0.25rem;"></span>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="kyc-aadhaar-file">
+                Upload Aadhaar Document
+                <span style="font-size: 0.7rem; color: var(--text-dim); font-weight: 400; margin-left: 0.4rem;">(PDF /
+                  JPG / PNG &middot; sandbox simulated)</span>
+              </label>
+              <input type="file" id="kyc-aadhaar-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
+                onchange="KycModal.onFileChange('aadhaar', this)">
+              <div id="kyc-aadhaar-dropzone" onclick="document.getElementById('kyc-aadhaar-file').click()"
+                ondragover="event.preventDefault(); this.classList.add('drag-over')"
+                ondragleave="this.classList.remove('drag-over')" ondrop="KycModal.onFileDrop('aadhaar', event)"
+                style="border: 2px dashed var(--border-subtle); border-radius: var(--radius-md); padding: 0.85rem 1rem; cursor: pointer; text-align: center; transition: all 0.2s; background: rgba(255,255,255,0.02);">
+                <i class="fas fa-cloud-upload-alt"
+                  style="font-size: 1.3rem; color: var(--text-dim); margin-bottom: 0.3rem; display: block;"></i>
+                <div id="kyc-aadhaar-file-label" style="font-size: 0.82rem; color: var(--text-dim);">Click or drag &amp;
+                  drop your Aadhaar document here</div>
+              </div>
+            </div>
+          </div>
+
+          <p
+            style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 1.25rem; text-align: center;">
+            <i class="fas fa-lock" style="color: var(--accent-cyan);"></i>
+            End-to-end encrypted. Only masked numbers stored. Never shared with third parties.
+          </p>
+
+          <button type="submit" id="btn-kyc-submit" class="btn btn-emerald btn-block btn-lg">
+            <i class="fas fa-shield-alt"></i> Submit for Verification
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 4: SANDBOX PAYMENT GATEWAY
+       ======================================================================= -->
+  <div id="modal-payment-gateway" class="modal-overlay">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-shield-alt" style="color: var(--accent-cyan);"></i> RideLink Secure Payment Gateway
+        </div>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="payment-amount-banner">
+          <div>
+            <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-dim); font-weight: 700;">Total
+              Amount Payable</div>
+            <div class="payment-amount-val" id="pay-total-amount">â‚¹0</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">
+              Booking Ref: <strong id="pay-booking-code">RL-BKG</strong> â€¢ <span id="pay-vehicle-title">Vehicle</span>
+            </div>
+          </div>
+          <div style="text-align: right; font-size: 0.75rem; color: var(--text-dim);">
+            <div>Base: <span id="pay-base-amt">â‚¹0</span></div>
+            <div>Protection: <span id="pay-shield-amt">â‚¹299</span></div>
+            <div>GST (18%): <span id="pay-cgst-amt">â‚¹0</span> + <span id="pay-sgst-amt">â‚¹0</span></div>
+            <div>Deposit: <span id="pay-deposit-amt">â‚¹0</span></div>
+          </div>
+        </div>
+
+        <div id="razorpay-demo-notice"
+          style="display: none; background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 8px; padding: 0.6rem 0.85rem; margin-bottom: 1rem; font-size: 0.8rem; color: #a5f3fc;">
+          <i class="fas fa-info-circle" style="color: var(--accent-cyan); margin-right: 0.4rem;"></i>
+          <strong>Interactive Test Gateway:</strong> Select any simulated payment method below (UPI, QR, Card,
+          NetBanking) for instant sandbox checkout.
+        </div>
+
+        <!-- 4 Payment Tabs: UPI, QR, Card, NetBanking -->
+        <div class="payment-methods-tabs" style="margin: 1.25rem 0;">
+          <button type="button" class="pay-tab-btn active" data-method="UPI"
+            onclick="PaymentFlow.switchPaymentTab('UPI')">
+            <i class="fas fa-mobile-alt"></i> UPI Apps
+          </button>
+          <button type="button" class="pay-tab-btn" data-method="QR" onclick="PaymentFlow.switchPaymentTab('QR')">
+            <i class="fas fa-qrcode"></i> Scan QR
+          </button>
+          <button type="button" class="pay-tab-btn" data-method="CARD" onclick="PaymentFlow.switchPaymentTab('CARD')">
+            <i class="fas fa-credit-card"></i> Card (3D Secure)
+          </button>
+          <button type="button" class="pay-tab-btn" data-method="NETBANKING"
+            onclick="PaymentFlow.switchPaymentTab('NETBANKING')">
+            <i class="fas fa-university"></i> Net Banking
+          </button>
+        </div>
+
+        <!-- TAB 1: UPI Apps -->
+        <div id="tab-pay-upi" class="payment-tab-content">
+          <div class="upi-apps-grid">
+            <button class="upi-app-btn" onclick="PaymentFlow.processPayment('UPI', { upiId: 'user@okhdfcbank' })">
+              <div class="upi-icon-badge" style="background: rgba(66, 133, 244, 0.15); color: #4285F4;"><i
+                  class="fab fa-google-pay"></i></div>
+              <span>Google Pay</span>
+            </button>
+            <button class="upi-app-btn" onclick="PaymentFlow.processPayment('UPI', { upiId: 'user@ybl' })">
+              <div class="upi-icon-badge" style="background: rgba(103, 58, 183, 0.15); color: #9C27B0;"><i
+                  class="fas fa-paper-plane"></i></div>
+              <span>PhonePe</span>
+            </button>
+            <button class="upi-app-btn" onclick="PaymentFlow.processPayment('UPI', { upiId: 'user@paytm' })">
+              <div class="upi-icon-badge" style="background: rgba(0, 186, 242, 0.15); color: #00BAF2;"><i
+                  class="fas fa-wallet"></i></div>
+              <span>Paytm UPI</span>
+            </button>
+            <button class="upi-app-btn" onclick="PaymentFlow.processPayment('UPI', { upiId: 'user@upi' })">
+              <div class="upi-icon-badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981;"><i
+                  class="fas fa-shield-alt"></i></div>
+              <span>BHIM UPI</span>
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-custom-upi">Or Pay via Custom UPI ID / VPA</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="input-custom-upi" class="form-control" placeholder="username@okhdfcbank"
+                value="rahul.sharma@okaxis">
+              <button class="btn btn-primary" onclick="PaymentFlow.processPayment('UPI')">Verify & Pay</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Dynamic QR Code -->
+        <div id="tab-pay-qr" class="payment-tab-content" style="display: none;">
+          <div class="qr-container">
+            <div class="qr-box" id="qr-code-display"></div>
+            <div class="qr-timer-pill">
+              <i class="fas fa-clock"></i> Code expires in <span id="qr-countdown-text">5:00</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+              Scan using any UPI App (GPay, PhonePe, Paytm, BHIM) on your phone.
+            </p>
+            <button class="btn btn-emerald" onclick="PaymentFlow.processPayment('QR')">
+              <i class="fas fa-camera"></i> Simulate Scan & Authorize
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 3: Credit/Debit Card -->
+        <div id="tab-pay-card" class="payment-tab-content" style="display: none;">
+          <div class="mock-credit-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div class="mock-card-chip"></div>
+              <i class="fab fa-cc-visa" style="font-size: 2rem; color: #fff;"></i>
+            </div>
+            <div class="mock-card-number">â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ 4242</div>
+            <div class="mock-card-footer">
+              <div class="mock-card-holder">RAHUL SHARMA</div>
+              <div class="mock-card-expiry">08/28</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="card-input-number">Card Number</label>
+            <input type="text" id="card-input-number" class="form-control" maxlength="19"
+              placeholder="4532 8892 1124 4242" value="4532 8892 1124 4242">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="card-input-name">Cardholder Name</label>
+              <input type="text" id="card-input-name" class="form-control" placeholder="RAHUL SHARMA"
+                value="RAHUL SHARMA">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="card-input-expiry">MM/YY</label>
+              <input type="text" id="card-input-expiry" class="form-control" placeholder="08/28" value="08/28">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="card-input-cvv">CVV</label>
+              <input type="password" id="card-input-cvv" class="form-control" maxlength="3" placeholder="â€¢â€¢â€¢"
+                value="789">
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-block" onclick="PaymentFlow.processPayment('CARD')">
+            <i class="fas fa-lock"></i> Pay & Request 3D Secure OTP
+          </button>
+        </div>
+
+        <!-- TAB 4: Net Banking -->
+        <div id="tab-pay-netbanking" class="payment-tab-content" style="display: none;">
+          <div class="netbanking-grid">
+            <button class="bank-option-btn selected"
+              onclick="PaymentFlow.processPayment('NETBANKING', { bankName: 'State Bank of India' })">
+              <i class="fas fa-university" style="color: #0076BE;"></i> State Bank of India
+            </button>
+            <button class="bank-option-btn"
+              onclick="PaymentFlow.processPayment('NETBANKING', { bankName: 'HDFC Bank' })">
+              <i class="fas fa-university" style="color: #004C8F;"></i> HDFC Bank
+            </button>
+            <button class="bank-option-btn"
+              onclick="PaymentFlow.processPayment('NETBANKING', { bankName: 'ICICI Bank' })">
+              <i class="fas fa-university" style="color: #F58220;"></i> ICICI Bank
+            </button>
+            <button class="bank-option-btn"
+              onclick="PaymentFlow.processPayment('NETBANKING', { bankName: 'Axis Bank' })">
+              <i class="fas fa-university" style="color: #97144D;"></i> Axis Bank
+            </button>
+            <button class="bank-option-btn"
+              onclick="PaymentFlow.processPayment('NETBANKING', { bankName: 'Kotak Mahindra Bank' })">
+              <i class="fas fa-university" style="color: #ED1C24;"></i> Kotak Mahindra Bank
+            </button>
+            <button class="bank-option-btn"
+              onclick="PaymentFlow.processPayment('NETBANKING', { bankName: 'Punjab National Bank' })">
+              <i class="fas fa-university" style="color: #A20A27;"></i> Punjab National Bank
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 5: PAYMENT SUCCESS CELEBRATION
+       ======================================================================= -->
+  <div id="modal-payment-success" class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-body">
+        <div class="payment-success-card">
+          <div class="success-icon-animated">
+            <i class="fas fa-check"></i>
+          </div>
+          <h2 style="font-family: var(--font-heading); font-size: 1.5rem;">Payment Successful!</h2>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">
+            Your ride has been confirmed and reserved. The host has been notified for vehicle handover.
+          </p>
+
+          <div
+            style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1rem; width: 100%; text-align: left; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.45rem;">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-dim);">Booking Code:</span>
+              <strong id="success-booking-code" style="color: var(--accent-cyan);">RL-BKG</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-dim);">Transaction Ref:</span>
+              <span id="success-txn-ref" style="font-family: monospace;">TXN</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-dim);">Amount Paid:</span>
+              <strong id="success-amount" style="color: var(--accent-emerald);">â‚¹0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-dim);">Payment Method:</span>
+              <span id="success-method">UPI</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-dim);">GST Invoice No:</span>
+              <span id="success-invoice-num" style="font-weight: 700;">INV</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; width: 100%; margin-top: 0.5rem;">
+            <button class="btn btn-outline btn-block" id="btn-success-view-invoice">
+              <i class="fas fa-file-invoice"></i> View Tax Invoice
+            </button>
+            <button class="btn btn-primary btn-block" onclick="closeModal(); navigateTo('customer-dash');">
+              <i class="fas fa-ticket-alt"></i> My Trips
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- =======================================================================
+       MODAL 5a: PAYMENT FAILURE / RETRY
+       ======================================================================= -->
+  <div id="modal-payment-failure" class="modal-overlay">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-body" style="text-align: center; padding: 2.5rem 2rem;">
+        <div
+          style="width: 72px; height: 72px; background: rgba(244,63,94,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; border: 2px solid rgba(244,63,94,0.4);">
+          <i class="fas fa-times" style="font-size: 2rem; color: var(--accent-rose);"></i>
+        </div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Payment Failed</h2>
+        <p id="failure-reason" style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+          Your payment could not be processed. No money has been deducted.
+        </p>
+        <div
+          style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.82rem; color: #FBBF24; text-align: left;">
+          <i class="fas fa-info-circle"></i> Your booking is kept as <strong>PENDING</strong> â€” you can safely retry
+          payment from My Bookings anytime.
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button id="btn-retry-payment" class="btn btn-primary btn-block">
+            <i class="fas fa-redo"></i> Retry Payment
+          </button>
+          <button class="btn btn-outline btn-block" onclick="closeModal(); navigateTo('customer-dash');">
+            <i class="fas fa-ticket-alt"></i> My Bookings
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 6: OFFICIAL GST TAX INVOICE
+       ======================================================================= -->
+
+  <div id="modal-tax-invoice" class="modal-overlay">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-file-invoice" style="color: var(--accent-cyan);"></i> Official GST Tax Invoice
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-emerald btn-sm" onclick="window.print()">
+            <i class="fas fa-print"></i> Print Invoice
+          </button>
+          <button class="modal-close"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="invoice-sheet" id="printable-invoice">
+          <div class="invoice-header-row">
+            <div>
+              <div class="invoice-brand">RideLink Mobility Technologies Ltd.</div>
+              <div class="invoice-gstin">GSTIN: 29AABCR8812Q1Z9 â€¢ SAC Code: 997311 (Passenger Rental)</div>
+              <div style="font-size: 0.775rem; color: #64748B;">Registered Office: 100ft Road, Indiranagar, Bengaluru,
+                KA 560038</div>
+            </div>
+            <div style="text-align: right;">
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: #0F172A;">TAX INVOICE</h2>
+              <div style="font-size: 0.85rem; font-weight: 700; color: #06B6D4;" id="inv-num-display">INV-2026-0001
+              </div>
+              <div style="font-size: 0.8rem; color: #64748B;" id="inv-date-display">Date</div>
+            </div>
+          </div>
+
+          <div class="invoice-parties-grid">
+            <div class="invoice-party-box">
+              <h4>Billed To (Customer)</h4>
+              <strong id="inv-cust-name">Rahul Sharma</strong>
+              <div id="inv-cust-email">rahul@customer.com</div>
+              <div id="inv-cust-phone">+91 98765 43210</div>
+              <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.25rem;">Verified Digital KYC Holder</div>
+            </div>
+
+            <div class="invoice-party-box">
+              <h4>Trip & Vehicle Details</h4>
+              <strong id="inv-vehicle-title">Tata Nexon EV Max</strong>
+              <div id="inv-rental-period">Duration</div>
+              <div id="inv-pickup-spot">Pickup Location</div>
+              <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.25rem;">Host: <span id="inv-host-name">Priya
+                  Patel</span></div>
+            </div>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>Item Description</th>
+                <th>SAC</th>
+                <th class="text-right">Rate</th>
+                <th class="text-right">Amount (INR)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vehicle Sharing Base Rental Charge</td>
+                <td>997311</td>
+                <td class="text-right">-</td>
+                <td class="text-right" id="inv-base-fare">â‚¹0</td>
+              </tr>
+              <tr>
+                <td>RideLink Roadside Shield & Comprehensive Protection</td>
+                <td>997311</td>
+                <td class="text-right">Flat</td>
+                <td class="text-right" id="inv-shield-fee">â‚¹299</td>
+              </tr>
+              <tr>
+                <td>CGST @ 9% (Central Goods & Services Tax)</td>
+                <td>-</td>
+                <td class="text-right">9.0%</td>
+                <td class="text-right" id="inv-cgst">â‚¹0</td>
+              </tr>
+              <tr>
+                <td>SGST @ 9% (State Goods & Services Tax)</td>
+                <td>-</td>
+                <td class="text-right">9.0%</td>
+                <td class="text-right" id="inv-sgst">â‚¹0</td>
+              </tr>
+              <tr>
+                <td>Refundable Security Deposit (Hold)</td>
+                <td>-</td>
+                <td class="text-right">-</td>
+                <td class="text-right" id="inv-sec-deposit">â‚¹0</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div
+            style="display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap;">
+            <div>
+              <div style="font-size: 0.75rem; color: #64748B;">Booking Code: <strong
+                  id="inv-booking-ref">RL-BKG</strong></div>
+              <div style="font-size: 0.75rem; color: #64748B;">Txn Ref: <strong id="inv-txn-ref">TXN</strong></div>
+              <div style="font-size: 0.75rem; color: #64748B;">Method: <strong id="inv-pay-method">UPI</strong></div>
+            </div>
+
+            <!-- GST e-Invoice QR Verification Code -->
+            <div id="inv-qr-wrapper"
+              style="display: flex; flex-direction: column; align-items: center; background: #fff; padding: 0.4rem; border: 1px solid #CBD5E1; border-radius: 6px;">
+              <div id="inv-qr-display"
+                style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;"></div>
+              <span style="font-size: 0.62rem; color: #475569; font-weight: 700; margin-top: 0.2rem;">GST e-Invoice
+                Verified</span>
+            </div>
+
+            <div class="invoice-summary-box">
+              <div class="invoice-summary-row grand-total">
+                <span>Grand Total Paid:</span>
+                <span id="inv-grand-total">â‚¹0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 7: ADD / LIST A VEHICLE (HOST)
+       ======================================================================= -->
+  <div id="modal-add-vehicle" class="modal-overlay">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-plus-circle" style="color: var(--accent-emerald);"></i> List Your Vehicle on RideLink
+        </div>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <form id="form-add-vehicle">
+          <div class="form-group">
+            <label class="form-label" for="v-add-title">Listing Headline</label>
+            <input type="text" id="v-add-title" class="form-control" required
+              placeholder="e.g. 2024 Kia Seltos GTX+ Dark Edition">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="v-add-brand">Brand / Make</label>
+              <input type="text" id="v-add-brand" class="form-control" required placeholder="Kia">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="v-add-model">Model</label>
+              <input type="text" id="v-add-model" class="form-control" required placeholder="Seltos GTX+">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="v-add-year">Year</label>
+              <input type="number" id="v-add-year" class="form-control" value="2024">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="v-add-category">Category</label>
+              <select id="v-add-category" class="form-control">
+                <option value="SUV">SUV / Crossover</option>
+                <option value="Sedan">Sedan</option>
+                <option value="Electric">Electric Vehicle (EV)</option>
+                <option value="Bike">Motorcycle / Scooter</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Luxury">Luxury Class</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="v-add-reg">Registration Number</label>
+              <input type="text" id="v-add-reg" class="form-control" required placeholder="e.g. KA-01-MJ-5566">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="v-add-city">City</label>
+              <select id="v-add-city" class="form-control">
+                <option value="Bangalore">Bangalore</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi NCR">Delhi NCR</option>
+                <option value="Goa">Goa</option>
+                <option value="Hyderabad">Hyderabad</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="v-add-address">Pickup Address / Landmark</label>
+              <input type="text" id="v-add-address" class="form-control" required
+                placeholder="e.g. Indiranagar Metro Station, Bangalore">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="v-add-price-day">Daily Rental Rate (â‚¹/day)</label>
+              <input type="number" id="v-add-price-day" class="form-control" required placeholder="2500" value="2500">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="v-add-price-hr">Hourly Rate (â‚¹/hr)</label>
+              <input type="number" id="v-add-price-hr" class="form-control" required placeholder="200" value="200">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="v-add-fuel">Fuel Type</label>
+              <select id="v-add-fuel" class="form-control">
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel Turbo">Diesel Turbo</option>
+                <option value="Electric">Electric</option>
+                <option value="CNG + Petrol">CNG + Petrol</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="v-add-transmission">Transmission</label>
+              <select id="v-add-transmission" class="form-control">
+                <option value="Automatic">Automatic</option>
+                <option value="Manual">Manual</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="v-add-seating">Seating</label>
+              <input type="number" id="v-add-seating" class="form-control" value="5">
+            </div>
+          </div>
+
+          <!-- VEHICLE PHOTO UPLOAD -->
+          <div class="form-group">
+            <label class="form-label">Vehicle Photos <span style="color:var(--text-dim);font-weight:400;">(up to 5
+                images)</span></label>
+
+            <!-- Drop Zone -->
+            <div id="v-photo-dropzone" style="
+                   border: 2px dashed rgba(6,182,212,0.45);
+                   border-radius: 14px;
+                   padding: 1.6rem 1rem;
+                   text-align: center;
+                   background: rgba(6,182,212,0.04);
+                   cursor: pointer;
+                   transition: border-color .2s, background .2s;
+                   position: relative;
+                 " ondragover="VehicleUpload.onDragOver(event)" ondragleave="VehicleUpload.onDragLeave(event)"
+              ondrop="VehicleUpload.onDrop(event)" onclick="document.getElementById('v-photo-input').click()">
+              <i class="fas fa-cloud-upload-alt"
+                style="font-size:2rem;color:var(--accent-cyan);margin-bottom:.5rem;"></i>
+              <p style="margin:.4rem 0 .2rem;font-weight:600;color:var(--text-muted);">Drag &amp; drop photos here</p>
+              <p style="font-size:.8rem;color:var(--text-dim);margin:0;">or <span
+                  style="color:var(--accent-cyan);text-decoration:underline;">click to browse</span> &nbsp;Â·&nbsp; JPG,
+                PNG, WebP &nbsp;Â·&nbsp; Max 5 MB each</p>
+              <input type="file" id="v-photo-input" accept="image/*" multiple style="display:none;"
+                onchange="VehicleUpload.onFilesSelected(event)">
+            </div>
+
+            <!-- Thumbnail Preview Grid -->
+            <div id="v-photo-preview-grid" style="display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.85rem;"></div>
+
+            <p id="v-photo-count-label" style="font-size:.78rem;color:var(--text-dim);margin-top:.4rem;">No photos
+              selected â€” a default image will be used.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="v-add-desc">Description & Instructions</label>
+            <textarea id="v-add-desc" class="form-control" rows="3"
+              placeholder="Condition, pickup guidelines, sanitization..."></textarea>
+          </div>
+
+          <!-- Host Authorization & Accuracy Declaration -->
+          <div class="form-group"
+            style="margin-top: 1.25rem; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-md); padding: 0.85rem 1rem;">
+            <label class="terms-checkbox-label" for="v-add-owner-declaration">
+              <input type="checkbox" id="v-add-owner-declaration">
+              <span>
+                I confirm that I am the registered owner or legally authorized representative of this vehicle, that all
+                registration (RC), insurance, and PUC documents are valid, and that all information provided is accurate
+                and truthful. I agree to the <a href="/terms.html#section-4" target="_blank">Host Responsibilities &amp;
+                  Listing Terms</a>.
+              </span>
+            </label>
+            <span id="v-add-declaration-error" class="field-error"
+              style="display:none;font-size:0.78rem;color:#FB7185;margin-top:0.35rem;"></span>
+          </div>
+
+          <button type="submit" class="btn btn-emerald btn-block btn-lg" style="margin-top: 1rem;">
+            <i class="fas fa-check-circle"></i> Publish Vehicle Listing
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 8: IN-APP TRIP MESSAGING / CHAT
+       ======================================================================= -->
+  <div id="modal-trip-chat" class="modal-overlay">
+    <div class="modal-content" style="max-width: 520px; display: flex; flex-direction: column; height: 560px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-comments" style="color: var(--accent-cyan);"></i>
+          <span id="chat-recipient-title">Chat with Host</span>
+        </div>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column;"
+        id="chat-messages-container">
+        <!-- Messages populated by JS -->
+      </div>
+
+      <div style="padding: 1rem 1.25rem; border-top: 1px solid var(--border-subtle); background: var(--bg-card);">
+        <form onsubmit="ChatReview.sendMessage(event)" style="display: flex; gap: 0.5rem;">
+          <input type="text" id="chat-input-text" class="form-control"
+            placeholder="Type a message (e.g. pickup spot, ETA)..." required autocomplete="off" style="flex: 1;">
+          <button type="submit" class="btn btn-primary" style="padding: 0 1.25rem;">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 9: TRIP REVIEW & RATING
+       ======================================================================= -->
+  <div id="modal-trip-review" class="modal-overlay">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-star" style="color: #FBBF24;"></i> Rate Your Rental Experience
+        </div>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;"
+            id="review-vehicle-title">Vehicle</h3>
+          <p style="font-size: 0.8rem; color: var(--text-dim);">How was the cleanliness, performance, and host
+            communication?</p>
+
+          <!-- Star Selector -->
+          <div style="font-size: 2rem; color: #FBBF24; cursor: pointer; margin: 0.75rem 0;" id="star-rating-selector">
+            <span class="star-btn active" data-val="1" onclick="ChatReview.setRating(1)">â˜…</span>
+            <span class="star-btn active" data-val="2" onclick="ChatReview.setRating(2)">â˜…</span>
+            <span class="star-btn active" data-val="3" onclick="ChatReview.setRating(3)">â˜…</span>
+            <span class="star-btn active" data-val="4" onclick="ChatReview.setRating(4)">â˜…</span>
+            <span class="star-btn active" data-val="5" onclick="ChatReview.setRating(5)">â˜…</span>
+          </div>
+        </div>
+
+        <form onsubmit="ChatReview.submitReview(event)">
+          <div class="form-group">
+            <label class="form-label" for="review-comment-input">Your Feedback (Public Review)</label>
+            <textarea id="review-comment-input" class="form-control" rows="3"
+              placeholder="Describe your experience with the car, pickup handover, and vehicle condition..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-emerald btn-block btn-lg" style="margin-top: 1rem;">
+            <i class="fas fa-check-circle"></i> Post Review & Rating
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <ul class="mobile-nav-items">
+      <li class="mobile-nav-item active" data-view="marketplace">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+      </li>
+      <li class="mobile-nav-item" id="mobile-nav-dash" data-view="customer-dash">
+        <i class="fas fa-ticket-alt"></i>
+        <span>My Trips</span>
+      </li>
+      <li class="mobile-nav-item" onclick="openModal('modal-kyc-verify')">
+        <i class="fas fa-id-card"></i>
+        <span>KYC</span>
+      </li>
+      <li class="mobile-nav-item" onclick="openModal('modal-auth')">
+        <i class="fas fa-user-circle"></i>
+        <span>Account</span>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Floating Toast Notifications Container -->
+  <div id="toast-container"></div>
+
+  <!-- Application Scripts â€” ORDER MATTERS -->
+  <script src="/js/api.js"></script>
+  <!-- Firebase SDK (v9 compat) for Google Sign-In -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="/js/firebase-auth.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/marketplace.js"></script>
+  <script src="/js/vehicle-detail.js"></script>
+  <script src="/js/razorpay-flow.js"></script>
+  <script src="/js/payment-flow.js"></script>
+  <script src="/js/customer-dash.js"></script>
+  <script src="/js/vehicle-upload.js"></script>
+  <script src="/js/owner-dash.js"></script>
+  <script src="/js/admin-dash.js"></script>
+  <script src="/js/chat-review.js"></script>
+</body>
+
+</html>

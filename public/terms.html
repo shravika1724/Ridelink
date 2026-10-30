@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms and Conditions â€“ RideLink Vehicle Sharing & Rental System</title>
+  <meta name="description" content="Official Terms and Conditions for RideLink â€“ India's peer-to-peer vehicle sharing and rental platform. Rules for renters, host obligations, booking policies, cancellations, and insurance guidelines.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6.5.1 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- App Stylesheets -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/legal.css">
+</head>
+<body>
+
+  <!-- =======================================================================
+       Header / Navigation Bar
+       ======================================================================= -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="/" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <span>Ride<span class="brand-highlight">Link</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/"><i class="fas fa-compass"></i> Explore Vehicles</a>
+        </li>
+        <li class="nav-item active">
+          <a href="/terms.html"><i class="fas fa-file-contract"></i> Terms &amp; Conditions</a>
+        </li>
+        <li class="nav-item">
+          <a href="/privacy.html"><i class="fas fa-user-shield"></i> Privacy Policy</a>
+        </li>
+      </ul>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <a href="/" class="btn btn-outline btn-sm">
+          <i class="fas fa-arrow-left"></i> Back to Vehicles
+        </a>
+        <button class="btn btn-primary btn-sm" onclick="window.print()" title="Print or Save PDF">
+          <i class="fas fa-print"></i> Print / PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =======================================================================
+       Main Terms & Conditions Page
+       ======================================================================= -->
+  <main class="legal-page">
+    <div class="legal-container">
+
+      <!-- Hero Banner -->
+      <section class="legal-hero">
+        <div class="legal-hero-glow"></div>
+        <div class="legal-hero-tag">
+          <i class="fas fa-shield-alt"></i> Legal Agreement &amp; Platform Guidelines
+        </div>
+        <h1 class="legal-hero-title">Terms &amp; Conditions of Use</h1>
+        <p class="legal-hero-subtitle">
+          Please read these Terms and Conditions carefully before registering, listing a vehicle, or booking a rental through RideLink. This document constitutes a legally binding contract between you and RideLink Mobility Technologies.
+        </p>
+
+        <!-- Metadata Chips -->
+        <div class="legal-meta-bar">
+          <div class="legal-meta-item">
+            <i class="fas fa-calendar-alt" style="color:var(--accent-cyan);"></i>
+            <span>Effective Date: <strong>October 29, 2026</strong></span>
+          </div>
+          <div class="legal-meta-item">
+            <i class="fas fa-code-branch" style="color:var(--accent-emerald);"></i>
+            <span>Policy Version: <strong>v1.0 (India Operations)</strong></span>
+          </div>
+          <div class="legal-meta-item">
+            <i class="fas fa-globe-asia" style="color:var(--accent-purple);"></i>
+            <span>Jurisdiction: <strong>Republic of India</strong></span>
+          </div>
+          <div class="legal-meta-item">
+            <i class="fas fa-balance-scale" style="color:var(--accent-amber);"></i>
+            <span>Statutory Acts: <strong>Motor Vehicles Act 1988 &amp; IT Act 2000</strong></span>
+          </div>
+        </div>
+
+        <!-- Quick Filter Input -->
+        <div class="legal-search-wrap">
+          <i class="fas fa-search legal-search-icon"></i>
+          <input type="text" id="legal-quick-filter" class="legal-search-input" placeholder="Search terms (e.g. cancellation, deposit, license, insurance, damages)..." onkeyup="filterLegalSections(this.value)">
+        </div>
+      </section>
+
+      <!-- Mobile Scrollable Navigation Pills -->
+      <nav class="legal-mobile-pills" aria-label="Quick jump navigation">
+        <a href="#section-1" class="legal-pill active">1. Overview</a>
+        <a href="#section-2" class="legal-pill">2. Registration</a>
+        <a href="#section-3" class="legal-pill">3. Driving License</a>
+        <a href="#section-4" class="legal-pill">4. Host Obligations</a>
+        <a href="#section-5" class="legal-pill">5. Renter Rules</a>
+        <a href="#section-6" class="legal-pill">6. Bookings</a>
+        <a href="#section-7" class="legal-pill">7. Charges &amp; GST</a>
+        <a href="#section-8" class="legal-pill">8. Cancellations</a>
+        <a href="#section-9" class="legal-pill">9. Pickup &amp; Return</a>
+        <a href="#section-10" class="legal-pill">10. Late Returns</a>
+        <a href="#section-11" class="legal-pill">11. Damages &amp; Insurance</a>
+        <a href="#section-12" class="legal-pill">12. Prohibited Uses</a>
+        <a href="#section-13" class="legal-pill">13. Liability</a>
+        <a href="#section-14" class="legal-pill">14. Disputes</a>
+        <a href="#section-15" class="legal-pill">15. Suspension</a>
+        <a href="#section-16" class="legal-pill">16. Contact</a>
+      </nav>
+
+      <!-- Two-Column Layout -->
+      <div class="legal-layout">
+
+        <!-- Sticky Sidebar Navigation (Desktop) -->
+        <aside class="legal-sidebar" aria-label="Table of Contents">
+          <div class="legal-sidebar-title">
+            <span>Table of Contents</span>
+            <i class="fas fa-list-ul"></i>
+          </div>
+          <ul class="legal-nav-list" id="legal-toc-list">
+            <li><a href="#section-1" class="legal-nav-link active"><span class="legal-nav-num">01</span> Overview &amp; Acceptance</a></li>
+            <li><a href="#section-2" class="legal-nav-link"><span class="legal-nav-num">02</span> User Registration &amp; Eligibility</a></li>
+            <li><a href="#section-3" class="legal-nav-link"><span class="legal-nav-num">03</span> Driving License &amp; KYC</a></li>
+            <li><a href="#section-4" class="legal-nav-link"><span class="legal-nav-num">04</span> Vehicle Owner (Host) Duties</a></li>
+            <li><a href="#section-5" class="legal-nav-link"><span class="legal-nav-num">05</span> Renter (Guest) Responsibilities</a></li>
+            <li><a href="#section-6" class="legal-nav-link"><span class="legal-nav-num">06</span> Booking Rules &amp; Extensions</a></li>
+            <li><a href="#section-7" class="legal-nav-link"><span class="legal-nav-num">07</span> Rental Charges, GST &amp; Payment</a></li>
+            <li><a href="#section-8" class="legal-nav-link"><span class="legal-nav-num">08</span> Cancellations &amp; Refund Policy</a></li>
+            <li><a href="#section-9" class="legal-nav-link"><span class="legal-nav-num">09</span> Handover &amp; Return Protocol</a></li>
+            <li><a href="#section-10" class="legal-nav-link"><span class="legal-nav-num">10</span> Late Returns &amp; Overstay Fees</a></li>
+            <li><a href="#section-11" class="legal-nav-link"><span class="legal-nav-num">11</span> Damage, Safety &amp; Insurance</a></li>
+            <li><a href="#section-12" class="legal-nav-link"><span class="legal-nav-num">12</span> Prohibited Activities</a></li>
+            <li><a href="#section-13" class="legal-nav-link"><span class="legal-nav-num">13</span> Platform Liability &amp; Disclaimers</a></li>
+            <li><a href="#section-14" class="legal-nav-link"><span class="legal-nav-num">14</span> Disputes &amp; Governing Law</a></li>
+            <li><a href="#section-15" class="legal-nav-link"><span class="legal-nav-num">15</span> Account Suspension &amp; Ban</a></li>
+            <li><a href="#section-16" class="legal-nav-link"><span class="legal-nav-num">16</span> Grievance Redressal &amp; Help</a></li>
+          </ul>
+
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+            <a href="/privacy.html" class="btn btn-outline btn-block btn-sm" style="font-size: 0.8rem;">
+              <i class="fas fa-lock"></i> View Privacy Policy
+            </a>
+          </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <article class="legal-content" id="legal-content-stream">
+
+          <!-- SECTION 1 -->
+          <section id="section-1" class="legal-card" data-title="Overview & Acceptance">
+            <div class="legal-card-header">
+              <div class="legal-card-icon">
+                <i class="fas fa-handshake"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 01</span>
+                <h2 class="legal-card-title">Platform Overview &amp; Acceptance of Terms</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              Welcome to <strong>RideLink</strong> (â€œPlatformâ€ , â€œweâ€ , â€œourâ€ , or â€œusâ€ ). RideLink operates a peer-to-peer digital mobility marketplace connecting independent registered motor vehicle owners (â€œHostsâ€  or â€œOwnersâ€ ) with verified individuals seeking to rent vehicles for personal transportation (â€œRentersâ€ , â€œGuestsâ€ , or â€œCustomersâ€ ).
+            </p>
+            <p class="legal-text">
+              By accessing the website, registering an account, listing a vehicle, or booking a vehicle, you expressly acknowledge and agree to be bound by these Terms and Conditions (â€œTermsâ€ ), along with our <a href="/privacy.html" style="color:var(--accent-cyan);text-decoration:underline;">Privacy Policy</a>. If you do not accept all of these terms, you are not authorized to use the Platform.
+            </p>
+            <div class="legal-callout">
+              <div class="legal-callout-header"><i class="fas fa-info-circle"></i> Intermediary Marketplace Notice</div>
+              RideLink acts strictly as an online technology intermediary within the meaning of Section 2(1)(w) and Section 79 of the Information Technology Act, 2000. RideLink facilitates connections, digital identity verifications, and payment processing between Hosts and Renters, but is not itself a transportation fleet operator or car rental agency, unless explicitly specified.
+            </div>
+          </section>
+
+          <!-- SECTION 2 -->
+          <section id="section-2" class="legal-card" data-title="User Registration & Eligibility">
+            <div class="legal-card-header">
+              <div class="legal-card-icon emerald">
+                <i class="fas fa-user-check"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 02</span>
+                <h2 class="legal-card-title">User Registration, Eligibility &amp; Account Security</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              To book or list vehicles on RideLink, you must register a personal account. By registering, you warrant and represent that:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span><strong>Age Requirement:</strong> You are at least 18 years of age (or older if specified for particular vehicle categories) and legally capable of entering into binding contracts under the Indian Contract Act, 1872.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span><strong>Accurate Personal Information:</strong> All information provided during registration (full legal name, mobile number, active email, residential city) is true, accurate, current, and verifiable.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span><strong>Single Account Rule:</strong> Each user may maintain only one active account. Creating duplicate accounts, using false identities, or registering on behalf of someone else without authority is strictly prohibited.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span><strong>Account Security:</strong> You are solely responsible for safeguarding your login credentials, OTP codes, and password. You must notify RideLink immediately of any suspected unauthorized access or security breach.</span>
+              </li>
+            </ul>
+            <div class="legal-decision-box">
+              <span class="legal-decision-badge">Decision Required</span>
+              <span><strong>Minimum Age Policy:</strong> Minimum age is set to 18 years for two-wheelers and compact hatchbacks; [DECISION REQUIRED: Specify if luxury/SUV categories require a higher minimum age such as 21 or 23 years, and minimum 1 year of driving experience].</span>
+            </div>
+          </section>
+
+          <!-- SECTION 3 -->
+          <section id="section-3" class="legal-card" data-title="Driving License & KYC">
+            <div class="legal-card-header">
+              <div class="legal-card-icon">
+                <i class="fas fa-id-card"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 03</span>
+                <h2 class="legal-card-title">Driving License &amp; KYC Verification Requirements</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              Valid driving credentials are a statutory prerequisite under the Motor Vehicles Act, 1988 for taking possession of any vehicle on RideLink.
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span><strong>Valid Indian Driving License:</strong> Renters must hold an active, non-expired original Driving License (LMV â€“ Light Motor Vehicle for four-wheelers, or MCWG / MCWOG for two-wheelers) issued by an authorized Regional Transport Office (RTO) in India.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-times-circle legal-list-bullet" style="color:var(--accent-rose);"></i>
+                <span><strong>Learner's Licenses (LLR) Disallowed:</strong> Learner's Driving Licenses, provisional receipts, or expired licenses are strictly not accepted under any circumstances.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span><strong>International Driving Permit (IDP):</strong> Foreign nationals or Non-Resident Indians (NRIs) may rent vehicles provided they furnish a valid International Driving Permit accompanied by their original home-country driving license and valid passport with Indian visa.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check-circle legal-list-bullet"></i>
+                <span><strong>Physical Verification at Handover:</strong> Irrespective of digital KYC verification completed on the app, the Renter <strong>must present the original physical driving license (or official DigiLocker app verification)</strong> to the Host at the time of vehicle pickup. The Host reserves the right to deny handover without penalty if the physical license cannot be verified.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 4 -->
+          <section id="section-4" class="legal-card" data-title="Vehicle Owner Responsibilities">
+            <div class="legal-card-header">
+              <div class="legal-card-icon emerald">
+                <i class="fas fa-car-side"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 04</span>
+                <h2 class="legal-card-title">Vehicle Owner (Host) Responsibilities</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              Vehicle owners listing vehicles on RideLink are entrusted with maintaining the highest standards of safety, accuracy, and legal compliance:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-shield-alt legal-list-bullet"></i>
+                <span><strong>Legal Authority &amp; Clear Title:</strong> The Host warrants that they are the registered legal owner of the vehicle (as per the vehicle Registration Certificate - RC) or hold a legally valid power of attorney / lease authority authorizing peer-to-peer sharing.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-file-invoice legal-list-bullet"></i>
+                <span><strong>Mandatory Statutory Documents:</strong> The vehicle must possess: (1) Valid Registration Certificate (RC), (2) Comprehensive Motor Insurance Policy covering third-party liability and self-drive / peer rental, (3) Valid Pollution Under Control (PUC) certificate, and (4) Fitness Certificate where applicable under state transport rules.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-wrench legal-list-bullet"></i>
+                <span><strong>Mechanical Roadworthiness:</strong> The vehicle must be mechanically safe, clean, sanitized, and roadworthy, with properly inflated tires with adequate tread, functioning brakes, lights, turn indicators, horn, wipers, seatbelts, and emergency toolkit / spare wheel.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-camera legal-list-bullet"></i>
+                <span><strong>Listing Accuracy:</strong> Photos, specifications, features (e.g. AC, Bluetooth, transmission), and pricing uploaded by the Host must represent the actual condition of the vehicle. Misleading photos or inaccurate specs may lead to delisting.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-clock legal-list-bullet"></i>
+                <span><strong>Punctual Handover:</strong> The Host must make the vehicle available at the designated pickup address on time. Unexcused host cancellations or delays harm the platform and incur host cancellation penalties.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 5 -->
+          <section id="section-5" class="legal-card" data-title="Renter Responsibilities">
+            <div class="legal-card-header">
+              <div class="legal-card-icon">
+                <i class="fas fa-steering-wheel"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 05</span>
+                <h2 class="legal-card-title">Renter (Guest) Responsibilities &amp; Custody</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              During the booking reservation period, the Renter assumes legal custody and care of the vehicle:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-user-lock legal-list-bullet"></i>
+                <span><strong>Sole Authorized Driver:</strong> Only the verified Renter whose identity and driving license were approved for the booking is permitted to operate the vehicle. Allowing any third party (including friends, family, or commercial drivers) to operate the vehicle without prior written RideLink authorization constitutes a material breach and voids all damage protection.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-road legal-list-bullet"></i>
+                <span><strong>Compliance with Traffic Laws:</strong> The Renter must strictly comply with all provisions of the Motor Vehicles Act, 1988, Indian Penal Code / Bharatiya Nyaya Sanhita, Central Motor Vehicle Rules, speed limits, and traffic police regulations.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-receipt legal-list-bullet"></i>
+                <span><strong>Traffic Challans &amp; Fines:</strong> The Renter is 100% liable for all traffic violations, speed camera e-challans, red light violations, parking fines, municipal towing charges, and FASTag electronic toll charges incurred during their reservation window.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-gas-pump legal-list-bullet"></i>
+                <span><strong>Fuel &amp; Energy Policy:</strong> Vehicles are handed over with a recorded fuel / battery charge level. The Renter must return the vehicle with an equivalent fuel / charge level. If returned with lesser fuel, the Host may claim the difference plus a refuelling service surcharge.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-lock legal-list-bullet"></i>
+                <span><strong>Vehicle Security:</strong> When parked, all windows and doors must be securely locked, and keys kept in safe custody. Never leave valuables in plain view inside the vehicle.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 6 -->
+          <section id="section-6" class="legal-card" data-title="Booking Rules & Extensions">
+            <div class="legal-card-header">
+              <div class="legal-card-icon purple">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 06</span>
+                <h2 class="legal-card-title">Booking Rules &amp; Trip Extensions</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              All vehicle reservations on RideLink are governed by standard booking parameters:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-check legal-list-bullet"></i>
+                <span><strong>Instant vs. Host Confirmation:</strong> Bookings become legally effective only after payment confirmation and receipt of the RideLink Booking Code (e.g. RL-BKG-XXXXXX).</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-clock legal-list-bullet"></i>
+                <span><strong>Rental Duration Units:</strong> Vehicles may be booked on an Hourly or Daily basis as configured by the Host. A standard daily rental covers a 24-hour cycle from the pickup timestamp.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-history legal-list-bullet"></i>
+                <span><strong>Trip Extensions:</strong> If you wish to extend your reservation, you must submit an extension request through the RideLink app at least [DECISION REQUIRED: e.g. 2 hours] prior to your scheduled drop-off time. Extensions are contingent upon vehicle availability, Host approval, and advance payment of additional rental charges.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 7 -->
+          <section id="section-7" class="legal-card" data-title="Charges, GST & Payment">
+            <div class="legal-card-header">
+              <div class="legal-card-icon amber">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 07</span>
+                <h2 class="legal-card-title">Rental Charges, Indian GST &amp; Payment Terms</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              RideLink maintains complete transparency in pricing. Your checkout summary displays an itemized breakdown before you pay:
+            </p>
+            <div class="legal-table-wrap">
+              <table class="legal-table">
+                <thead>
+                  <tr>
+                    <th>Price Component</th>
+                    <th>Rate / Basis</th>
+                    <th>Description &amp; GST Applicability</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Base Rental Fare</strong></td>
+                    <td>Hourly or Daily rate</td>
+                    <td>Set by the vehicle host based on vehicle category and season.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Roadside &amp; Protection Fee</strong></td>
+                    <td>â‚¹299 per reservation</td>
+                    <td>Covers 24/7 roadside assistance, towing coverage, and damage deductible cap.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Goods &amp; Services Tax (GST)</strong></td>
+                    <td>18% (9% CGST + 9% SGST)</td>
+                    <td>Mandatory Indian tax under Central and State GST Acts on taxable service components.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Trip Add-ons (Optional)</strong></td>
+                    <td>Itemized rates (e.g. â‚¹99 - â‚¹499)</td>
+                    <td>Helmets, child safety seats, unlimited km shield, or doorstep delivery.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Refundable Security Deposit</strong></td>
+                    <td>â‚¹2,000 â€“ â‚¹5,000 (Category dependent)</td>
+                    <td>Held against traffic challans, fuel deficit, or damages; 100% refunded post-trip.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="legal-text">
+              Payments are processed securely via Razorpay or authorized Indian payment gateways supporting UPI, credit/debit cards (Visa, MasterCard, RuPay), and net banking. Official GST tax invoices are generated upon booking confirmation.
+            </p>
+          </section>
+
+          <!-- SECTION 8 -->
+          <section id="section-8" class="legal-card" data-title="Cancellations & Refunds">
+            <div class="legal-card-header">
+              <div class="legal-card-icon rose">
+                <i class="fas fa-undo-alt"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 08</span>
+                <h2 class="legal-card-title">Cancellations &amp; Refund Policy</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              We understand plans can change. Cancellations must be submitted through the RideLink platform prior to the scheduled pickup time:
+            </p>
+            <div class="legal-table-wrap">
+              <table class="legal-table">
+                <thead>
+                  <tr>
+                    <th>Cancellation Window</th>
+                    <th>Renter Refund Percentage</th>
+                    <th>Deposit Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>More than 6 hours prior to pickup</strong></td>
+                    <td>100% of Base Rental refunded <br><small style="color:var(--text-dim);">[DECISION REQUIRED: Confirm whether nominal gateway processing fee applies]</small></td>
+                    <td>100% Refunded</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Between 2 to 6 hours prior to pickup</strong></td>
+                    <td>50% of Base Rental refunded</td>
+                    <td>100% Refunded</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Less than 2 hours or No-Show</strong></td>
+                    <td>Non-refundable (1 day rental retained to compensate host)</td>
+                    <td>100% Refunded</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Host-Initiated Cancellation</strong></td>
+                    <td>100% Full Refund + platform credit</td>
+                    <td>100% Refunded</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="legal-decision-box">
+              <span class="legal-decision-badge">Decision Required</span>
+              <span><strong>Refund Turnaround Time:</strong> Approved refunds are routed through original payment channels (UPI/Bank/Card) within [DECISION REQUIRED: Specify refund timeline, e.g. 5 to 7 business days as per Razorpay standard settlement].</span>
+            </div>
+          </section>
+
+          <!-- SECTION 9 -->
+          <section id="section-9" class="legal-card" data-title="Pickup & Return Protocol">
+            <div class="legal-card-header">
+              <div class="legal-card-icon emerald">
+                <i class="fas fa-clipboard-check"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 09</span>
+                <h2 class="legal-card-title">Vehicle Pickup, Handover &amp; Return Protocol</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              To prevent disputes regarding pre-existing blemishes versus new trip damages, Host and Renter must adhere to the joint inspection protocol:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-camera legal-list-bullet"></i>
+                <span><strong>Pre-Trip Joint Inspection:</strong> Before keys are handed over, both parties must inspect the exterior and interior, record the exact odometer reading and fuel level, and take timestamped 360-degree photos of any scratches, dents, or defects.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-map-marker-alt legal-list-bullet"></i>
+                <span><strong>Return Location &amp; Time:</strong> The vehicle must be returned to the agreed pickup location (or doorstep address if booked with delivery add-on) on or before the scheduled return timestamp.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-check-double legal-list-bullet"></i>
+                <span><strong>Post-Trip Sign-off:</strong> The Host will inspect the vehicle upon return, check fuel level, and confirm the trip completion in the app. The security deposit refund is triggered upon successful return sign-off.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 10 -->
+          <section id="section-10" class="legal-card" data-title="Late Returns & Overstay">
+            <div class="legal-card-header">
+              <div class="legal-card-icon amber">
+                <i class="fas fa-stopwatch"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 10</span>
+                <h2 class="legal-card-title">Late Returns, Overstay Penalties &amp; Unauthorized Retention</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              Late returns disrupt subsequent reservations and host commitments. The following overstay rules apply:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-hourglass-half legal-list-bullet"></i>
+                <span><strong>Grace Period:</strong> A complimentary grace period of <strong>30 minutes</strong> is provided for unforeseen city traffic delays.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-exclamation-triangle legal-list-bullet" style="color:var(--accent-amber);"></i>
+                <span><strong>Overstay Charges:</strong> After the grace period expires without an approved extension, the Renter will be billed for additional hours at the standard rate plus an overstay penalty of [DECISION REQUIRED: e.g. â‚¹200 â€“ â‚¹500 per hour or double the standard hourly rate].</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-gavel legal-list-bullet" style="color:var(--accent-rose);"></i>
+                <span><strong>Unauthorized Retention &amp; Police Reporting:</strong> Failure to return the vehicle within [DECISION REQUIRED: e.g. 6 hours] of the scheduled end time without communication will be treated as unauthorized conversion or vehicle theft under relevant provisions of the Bharatiya Nyaya Sanhita (BNS) / Indian Penal Code, and will be reported to law enforcement authorities.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 11 -->
+          <section id="section-11" class="legal-card" data-title="Damage, Safety & Insurance">
+            <div class="legal-card-header">
+              <div class="legal-card-icon">
+                <i class="fas fa-car-crash"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 11</span>
+                <h2 class="legal-card-title">Vehicle Damage, Safety &amp; Insurance Protection</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              RideLink incorporates comprehensive damage protection safeguards:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-shield-alt legal-list-bullet"></i>
+                <span><strong>Damage Protection Deductible Cap:</strong> For accidental collision damages occurring during an authorized trip where terms were fully honored, the Renter's maximum out-of-pocket financial liability is capped at the damage deductible of [DECISION REQUIRED: e.g. â‚¹5,000 for standard cars, â‚¹10,000 for luxury/SUVs], with remainder covered by motor insurance policy.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-ban legal-list-bullet" style="color:var(--accent-rose);"></i>
+                <span><strong>Exceptions Voiding Damage Protection:</strong> Protection does NOT apply if: (a) driver was under influence of alcohol or narcotics, (b) driven by an unauthorized unregistered driver, (c) driving off-road or into flood waters, (d) deliberate vandalism or racing, (e) severe clutch burning due to improper operation, or (f) failure to notify RideLink immediately of an incident. In such cases, Renter is 100% liable for full repair costs and loss of host revenue.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-phone-alt legal-list-bullet"></i>
+                <span><strong>Accident Protocol:</strong> In case of an accident: (1) Ensure passenger medical safety, (2) Call emergency medical or police assistance if required, (3) File a Police First Information Report (FIR) if third-party injury or property damage is involved, and (4) Inform RideLink 24/7 Roadside Assistance within 2 hours.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 12 -->
+          <section id="section-12" class="legal-card" data-title="Prohibited Activities">
+            <div class="legal-card-header">
+              <div class="legal-card-icon rose">
+                <i class="fas fa-ban"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 12</span>
+                <h2 class="legal-card-title">Prohibited Vehicle Activities</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              The vehicle must NOT be used under any circumstances for the following prohibited activities:
+            </p>
+            <div class="legal-callout danger">
+              <div class="legal-callout-header"><i class="fas fa-exclamation-triangle"></i> Strictly Prohibited Uses</div>
+              <ul style="margin-left: 1.25rem; margin-top: 0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
+                <li>Commercial carrying of passengers for hire or reward (operating as an unmetered taxi or ride-hailing vehicle).</li>
+                <li>Driving under the influence of alcohol, drugs, or prescription narcotics affecting alertness.</li>
+                <li>Transporting hazardous chemicals, inflammable substances, explosives, firearms, or contraband prohibited under the Narcotic Drugs and Psychotropic Substances Act (NDPS).</li>
+                <li>Speed testing, drag racing, motor sport rallies, off-roading, stunting, or endurance tests.</li>
+                <li>Towing, pushing, or hauling any other vehicle, trailer, or object.</li>
+                <li>Sub-renting, subletting, pledging, or transferring custody of the vehicle to any third party.</li>
+                <li>Smoking, tobacco consumption, or open alcohol containers inside the vehicle.</li>
+                <li>Carrying passengers or cargo exceeding the vehicle's authorized seating capacity or Gross Vehicle Weight (GVW).</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- SECTION 13 -->
+          <section id="section-13" class="legal-card" data-title="Liability & Disclaimers">
+            <div class="legal-card-header">
+              <div class="legal-card-icon amber">
+                <i class="fas fa-balance-scale"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 13</span>
+                <h2 class="legal-card-title">Platform Liability &amp; Disclaimers</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              RideLink provides the digital marketplace on an <strong>â€œAS ISâ€ </strong> and <strong>â€œAS AVAILABLEâ€ </strong> basis. To the maximum extent permitted by Indian law:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-info-circle legal-list-bullet"></i>
+                <span>RideLink does not warrant that the website or API will be uninterrupted, error-free, or free of harmful components.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-info-circle legal-list-bullet"></i>
+                <span>RideLink does not guarantee the continuous availability, mechanical perfection, or punctuality of any individual vehicle listed by independent Hosts.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-info-circle legal-list-bullet"></i>
+                <span>In no event shall RideLink, its directors, employees, or partners be liable for indirect, incidental, punitive, or consequential damages, including loss of profits, trip interruptions, or personal injury resulting from vehicle use.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 14 -->
+          <section id="section-14" class="legal-card" data-title="Disputes & Governing Law">
+            <div class="legal-card-header">
+              <div class="legal-card-icon purple">
+                <i class="fas fa-gavel"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 14</span>
+                <h2 class="legal-card-title">Dispute Resolution &amp; Governing Law (India)</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              These Terms shall be construed, interpreted, and governed in accordance with the laws of the Republic of India:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-comments legal-list-bullet"></i>
+                <span><strong>Informal Resolution:</strong> In the event of any dispute or disagreement, the parties agree to first attempt resolution through good-faith informal consultation via RideLink customer support for at least 14 business days.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-balance-scale legal-list-bullet"></i>
+                <span><strong>Arbitration:</strong> Any unresolved dispute arising out of or in connection with these Terms shall be referred to and finally resolved by arbitration administered under the Arbitration and Conciliation Act, 1996 by a sole arbitrator mutually appointed by the parties. The seat and venue of arbitration shall be [DECISION REQUIRED: e.g. Bengaluru / Bangalore, Karnataka, India], and proceedings conducted in the English language.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-landmark legal-list-bullet"></i>
+                <span><strong>Court Jurisdiction:</strong> Subject to arbitration, the competent courts at [DECISION REQUIRED: e.g. Bengaluru, Karnataka, India] shall have exclusive jurisdiction over all matters arising hereunder.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 15 -->
+          <section id="section-15" class="legal-card" data-title="Account Suspension & Ban">
+            <div class="legal-card-header">
+              <div class="legal-card-icon rose">
+                <i class="fas fa-user-slash"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 15</span>
+                <h2 class="legal-card-title">Account Suspension, Termination &amp; Blacklisting</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              RideLink reserves the right to immediately suspend, restrict, or permanently terminate user accounts under any of the following circumstances:
+            </p>
+            <ul class="legal-list">
+              <li class="legal-list-item">
+                <i class="fas fa-times-circle legal-list-bullet" style="color:var(--accent-rose);"></i>
+                <span>Submission of fraudulent, forged, or altered identity documents (Aadhaar or Driving License).</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-times-circle legal-list-bullet" style="color:var(--accent-rose);"></i>
+                <span>Dangerous driving reports, severe speed violations, or involvement in illicit activities using a vehicle.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-times-circle legal-list-bullet" style="color:var(--accent-rose);"></i>
+                <span>Non-payment of rental charges, traffic fines, damage dues, or recurring chargeback abuse.</span>
+              </li>
+              <li class="legal-list-item">
+                <i class="fas fa-times-circle legal-list-bullet" style="color:var(--accent-rose);"></i>
+                <span>Verbal or physical harassment, abusive language, or discrimination directed towards Hosts, Renters, or RideLink staff.</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- SECTION 16 -->
+          <section id="section-16" class="legal-card" data-title="Grievance Redressal & Contact">
+            <div class="legal-card-header">
+              <div class="legal-card-icon emerald">
+                <i class="fas fa-envelope-open-text"></i>
+              </div>
+              <div>
+                <span class="legal-section-num">Section 16</span>
+                <h2 class="legal-card-title">Grievance Redressal Mechanism &amp; Contact Details</h2>
+              </div>
+            </div>
+            <p class="legal-text">
+              Pursuant to Rule 3(2) of the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, the contact details of the designated Grievance Officer are set forth below:
+            </p>
+            <div class="legal-callout emerald">
+              <div class="legal-callout-header"><i class="fas fa-id-badge"></i> Designated Grievance Officer</div>
+              <p style="margin-top:0.4rem;"><strong>Name:</strong> [DECISION REQUIRED: e.g. Aniket Verma, Grievance Officer]</p>
+              <p><strong>Designation:</strong> Legal &amp; Regulatory Compliance Head, RideLink Mobility</p>
+              <p><strong>Official Email:</strong> <a href="mailto:grievance@ridelink.in" style="color:var(--accent-cyan);">[DECISION REQUIRED: e.g. grievance@ridelink.in / support@ridelink.com]</a></p>
+              <p><strong>Registered Office Address:</strong> [DECISION REQUIRED: e.g. RideLink Mobility Technologies Pvt. Ltd., #412 Indiranagar 100ft Road, Bangalore, Karnataka - 560038, India]</p>
+              <p><strong>Support Helpline:</strong> [DECISION REQUIRED: e.g. +91 80 4567 8900 (Mon - Sat, 9:00 AM - 7:00 PM IST)]</p>
+            </div>
+            <p class="legal-text" style="font-size:0.85rem; color:var(--text-dim); margin-top:1rem;">
+              Complaints received by the Grievance Officer will be acknowledged within twenty-four (24) hours and redressed within fifteen (15) days in accordance with statutory guidelines.
+            </p>
+          </section>
+
+        </article>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Floating Back to Top Button -->
+  <button id="legal-back-top" class="legal-back-top" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- =======================================================================
+       Website Footer
+       ======================================================================= -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+            <span>Ride<span class="brand-highlight">Link</span></span>
+          </div>
+          <p class="footer-desc">
+            Indiaâ€™s premier peer-to-peer vehicle sharing and mobility ecosystem. Rent verified cars, SUVs, bikes, and EVs across major Indian metropolitan areas with transparent GST pricing, instant sandbox verification, and comprehensive damage protection.
+          </p>
+          <div class="footer-badges">
+            <span class="footer-trust-chip"><i class="fas fa-shield-alt"></i> 256-Bit SSL Encrypted</span>
+            <span class="footer-trust-chip"><i class="fas fa-check-circle"></i> MoRTH DL Verified</span>
+            <span class="footer-trust-chip"><i class="fas fa-percent"></i> 18% GST Compliant</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Explore Mobility</h4>
+          <ul class="footer-links">
+            <li><a href="/#view-marketplace" class="footer-link"><i class="fas fa-car"></i> Cars &amp; SUVs</a></li>
+            <li><a href="/#view-marketplace" class="footer-link"><i class="fas fa-charging-station"></i> Electric Vehicles</a></li>
+            <li><a href="/#view-marketplace" class="footer-link"><i class="fas fa-motorcycle"></i> Two-Wheelers</a></li>
+            <li><a href="/#view-marketplace" class="footer-link"><i class="fas fa-crown"></i> Luxury Fleet</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Host Community</h4>
+          <ul class="footer-links">
+            <li><a href="/" class="footer-link"><i class="fas fa-plus-circle"></i> List Your Vehicle</a></li>
+            <li><a href="/terms.html#section-4" class="footer-link"><i class="fas fa-car-side"></i> Host Guidelines</a></li>
+            <li><a href="/terms.html#section-11" class="footer-link"><i class="fas fa-shield-alt"></i> Protection &amp; Shield</a></li>
+            <li><a href="/terms.html#section-7" class="footer-link"><i class="fas fa-calculator"></i> Earnings &amp; Payouts</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Legal &amp; Trust</h4>
+          <ul class="footer-links">
+            <li><a href="/terms.html" class="footer-link" style="color:var(--accent-cyan);font-weight:600;"><i class="fas fa-file-contract"></i> Terms and Conditions</a></li>
+            <li><a href="/privacy.html" class="footer-link"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            <li><a href="/terms.html#section-8" class="footer-link"><i class="fas fa-undo"></i> Cancellation &amp; Refund Policy</a></li>
+            <li><a href="/terms.html#section-16" class="footer-link"><i class="fas fa-envelope"></i> Grievance Officer</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 RideLink Mobility Technologies Pvt. Ltd. All rights reserved. Operating in compliance with the Motor Vehicles Act 1988 and Information Technology Act 2000.</p>
+        <div class="footer-legal-links">
+          <a href="/terms.html">Terms &amp; Conditions</a>
+          <a href="/privacy.html">Privacy Policy</a>
+          <a href="/terms.html#section-8">Refund Rules</a>
+          <a href="/terms.html#section-16">Support Desk</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script for Table of Contents spy, search filter & back-to-top -->
+  <script>
+    // Quick search filter for legal sections
+    function filterLegalSections(query) {
+      const q = (query || '').toLowerCase().trim();
+      const sections = document.querySelectorAll('.legal-card');
+      sections.forEach(sec => {
+        const text = sec.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          sec.style.display = 'block';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+    }
+
+    // Scroll spy for sticky sidebar navigation
+    window.addEventListener('scroll', () => {
+      const scrollY = window.pageYOffset;
+      const backTop = document.getElementById('legal-back-top');
+      if (backTop) {
+        if (scrollY > 400) backTop.classList.add('show');
+        else backTop.classList.remove('show');
+      }
+
+      const sections = document.querySelectorAll('.legal-card');
+      let currentSectionId = '';
+      sections.forEach(sec => {
+        const sectionTop = sec.offsetTop - 120;
+        const sectionHeight = sec.offsetHeight;
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          currentSectionId = sec.getAttribute('id');
+        }
+      });
+
+      if (currentSectionId) {
+        document.querySelectorAll('.legal-nav-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${currentSectionId}`) {
+            link.classList.add('active');
+          }
+        });
+        document.querySelectorAll('.legal-pill').forEach(pill => {
+          pill.classList.remove('active');
+          if (pill.getAttribute('href') === `#${currentSectionId}`) {
+            pill.classList.add('active');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

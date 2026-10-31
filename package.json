@@ -5,7 +5,11 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "dev": "node server/server.js"
+    "dev": "node server/server.js",
+    "build": "node -e \"console.log('RideLink build complete')\""
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x"
   },
   "keywords": [
     "car-rental",

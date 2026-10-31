@@ -1,12 +1,54 @@
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 const bcrypt = require('bcryptjs');
 
-const dbPath = path.join(__dirname, 'ridelink.sqlite');
+const os = require('os');
+
+const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+let dbPath;
+
+if (isVercel) {
+  const tempDir = os.tmpdir();
+  const tmpDbPath = path.join(tempDir, 'ridelink.sqlite');
+  const sourceDbPath = path.join(__dirname, 'ridelink.sqlite');
+
+  if (!fs.existsSync(tmpDbPath)) {
+    try {
+      if (fs.existsSync(sourceDbPath)) {
+        fs.copyFileSync(sourceDbPath, tmpDbPath);
+
+        const sourceWal = path.join(__dirname, 'ridelink.sqlite-wal');
+        const tmpWal = path.join(tempDir, 'ridelink.sqlite-wal');
+        if (fs.existsSync(sourceWal)) {
+          try { fs.copyFileSync(sourceWal, tmpWal); } catch (_) {}
+        }
+
+        const sourceShm = path.join(__dirname, 'ridelink.sqlite-shm');
+        const tmpShm = path.join(tempDir, 'ridelink.sqlite-shm');
+        if (fs.existsSync(sourceShm)) {
+          try { fs.copyFileSync(sourceShm, tmpShm); } catch (_) {}
+        }
+
+        console.log('✅ Copied seed SQLite database to ' + tmpDbPath);
+      }
+    } catch (err) {
+      console.warn('⚠️ Could not copy seed sqlite database to temp directory:', err.message);
+    }
+  }
+  dbPath = tmpDbPath;
+} else {
+  dbPath = path.join(__dirname, 'ridelink.sqlite');
+}
+
 const db = new Database(dbPath);
 
-// Enable foreign keys and WAL mode for better concurrency
-db.pragma('journal_mode = WAL');
+// Enable foreign keys and journal mode (fallback to DELETE if WAL is unsupported in environment)
+try {
+  db.pragma('journal_mode = WAL');
+} catch (e) {
+  try { db.pragma('journal_mode = DELETE'); } catch (_) {}
+}
 db.pragma('foreign_keys = ON');
 
 function initDatabase() {

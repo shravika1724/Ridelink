@@ -68,8 +68,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`🚀 RideLink Vehicle Sharing & Rental System running at http://localhost:${PORT}`);
-});
+let server = null;
+if (require.main === module && !process.env.VERCEL) {
+  server = app.listen(PORT, () => {
+    console.log(`🚀 RideLink Vehicle Sharing & Rental System running at http://localhost:${PORT}`);
+  });
+}
 
-module.exports = { app, server };
+module.exports = app;
+module.exports.app = app;
+module.exports.server = server;
